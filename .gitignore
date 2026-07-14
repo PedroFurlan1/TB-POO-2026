@@ -1,0 +1,7 @@
+# Arquivos e pastas do IntelliJ (JetBrains)
+.idea/
+*.iml
+*.iws
+out/
+build/
+target/
