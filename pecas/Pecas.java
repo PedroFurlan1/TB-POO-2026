@@ -4,6 +4,7 @@ public class Pecas {
     // Atributos
     protected Cores cor;
 
+
     // ENUM de cores
     public enum Cores {
         PRETO,
@@ -26,4 +27,17 @@ public class Pecas {
         }
         return false;
     }
+
+    //2. Metodo para ver se é valido
+    public boolean is_valid(int x1, int y1, int x2, int y2) {
+        return true;
+    }
+
+    //3. gets e sets
+    public Cores getCor() {
+        return cor;
+    }
+
+
+
 }

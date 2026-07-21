@@ -11,6 +11,7 @@ public class Cavalo extends Pecas implements  ValidarJogadas {
     }
 
     // Metodos
+    @Override
     public boolean is_valid(int x1, int y1, int x2, int y2) {
         if(super.samPlace(x1, y1, x2, y2)) return false;
 

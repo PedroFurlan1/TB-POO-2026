@@ -15,6 +15,7 @@ public class Peao extends Pecas implements  ValidarJogadas {
     }
 
     // Metodos
+    @Override
     public boolean is_valid(int x1, int y1, int x2, int y2) {
         // Primeiro verificamos se a peça se moveu
         if (super.samPlace(x1, y1, x2, y2)) return false;

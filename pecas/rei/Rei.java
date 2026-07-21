@@ -12,6 +12,7 @@ public class Rei extends Pecas implements  ValidarJogadas {
     }
 
     // Metodos
+    @Override
     public boolean is_valid(int x1, int y1, int x2, int y2) {
 
     }
