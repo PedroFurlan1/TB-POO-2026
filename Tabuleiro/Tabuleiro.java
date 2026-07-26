@@ -176,5 +176,54 @@ public class Tabuleiro {
 
     }
 
+    public boolean caminhoLimpo(int x1, int y1, int x2, int y2){
+        System.out.println("fazer");
+        return True;
+    }
+
+    public void mostraTabuleiro(Pecas[][] pecas) {
+        //Criando e printando o vetor com as letras que estarão nas colunas
+        char[] letras = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+        System.out.print(" \t");
+        for (int k = 0; k<8; k++) {
+            System.out.printf("%c\t", letras[k]);
+        }
+        //Laços aninhados que printarão o tabuleiro
+        for (int i = 0; i< 8; i++) {
+            System.out.println();                 //Espaço entre as linhas
+            System.out.printf("%d\t", i);         //Printando os números das linhas
+            for(int j = 0; j< 8; j++) {
+                if (pecas[i][j] == null) {
+                    System.out.printf(".\t");                    //Printando . caso o espaço esteja vazio
+                    continue;
+                }
+                switch(pecas[i][j].getCor()) {                     //Switch para separar as peças pretas das brancas
+                    case PRETO:
+                        switch (pecas[i][j]) {                     //Switch para printar de acordo com o tipo da peça
+                            case Rei rei -> System.out.printf("♚\t");
+                            case Rainha rainha -> System.out.printf("♛\t");
+                            case Torre torre -> System.out.printf("♜\t");
+                            case Bispo bispo -> System.out.printf("♝\t");
+                            case Cavalo cavalo -> System.out.printf("♞\t");
+                            case null, default -> System.out.printf("♟\t");
+                        }
+                        break;
+                    case BRANCO:
+                        switch (pecas[i][j]) {                      //Switch para printar de acordo com o tipo da peça
+                            case Rei rei -> System.out.printf("♔\t");
+                            case Rainha rainha -> System.out.printf("♕\t");
+                            case Torre torre -> System.out.printf("♖\t");
+                            case Bispo bispo -> System.out.printf("♗\t");
+                            case Cavalo cavalo -> System.out.printf("♘\t");
+                            case null, default -> System.out.printf("♙\t");
+
+                        }
+                        break;
+            }
+
+            }
+            System.out.println();
+        }
+    }
 
 }
