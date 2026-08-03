@@ -13,7 +13,7 @@ public class Tabuleiro {
     private Pecas[][] pecas;
     private final int tam = 8;
     public final Map<Character, Integer> mapaLinhas = Map.of(
-            'a', 0, 'b', 2, 'c', 3, 'd', 4, 'e', 5, 'f', 6, 'h', 7, 'i', 8
+            'a', 0, 'b', 1, 'c', 2, 'd', 3, 'e', 4, 'f', 5, 'h', 6, 'i', 7
     );
 
     // Constutor (inicializa o tabuleiro)
@@ -69,12 +69,12 @@ public class Tabuleiro {
         pecas[7][j] = new Rainha(Pecas.Cores.PRETO);
         // Peoes
         i = 0;
-        for (; i < tam; i++) pecas[6][i] = new Peao(Pecas.Cores.BRANCO);
+        for (; i < tam; i++) pecas[6][i] = new Peao(Pecas.Cores.PRETO);
 
         // Vazias
         i = 2; j = 0;
         for (;i < 5; i++) {
-            for (;j < tam; j++) {
+            for (j = 0;j < tam; j++) {
                 pecas[i][j] = new Vazio(Pecas.Cores.BRANCO);
             }
         }
@@ -89,7 +89,7 @@ public class Tabuleiro {
         int[] vetor = tratarJogada(pos1, pos2);
         if (vetor == null) return;
 
-        int x1 = vetor[0] - 1; int y1 = vetor[1] - 1; int x2 = vetor[2] - 1; int y2 = vetor[3] - 1;
+        int x1 = vetor[0] - 1; int y1 = vetor[1]; int x2 = vetor[2] - 1; int y2 = vetor[3];
 
         // Primeiro vamos pegar a peça na posicao incial
         Pecas pecaAux = pecas[x1][y1];
@@ -110,18 +110,18 @@ public class Tabuleiro {
 
 
             // Verificando se tem alguma peça no caminho
-            if ((pecas[x1][x2] instanceof Rainha) || (pecas[x1][x2] instanceof Torre) || (pecas[x1][x2] instanceof Bispo) && !(caminhoLimpo(x1, y2, x1, y2))) {
+            if ((pecas[x1][y1] instanceof Rainha || pecas[x1][y1] instanceof Torre || pecas[x1][y1] instanceof Bispo) && !(caminhoLimpo(x1, y1, x2, y2))) {
                 System.out.println("Erro: Há peças no caminho");
                 return;
             }
 
             // Ação de comer - peao come diferentes
-            if (!(pecas[x2][y2] instanceof Peao)) {
+            if (!(pecas[x1][y1] instanceof Peao)) {
                 pecas[x2][y2] = pecas[x1][y1];
                 pecas[x1][y1] = new Vazio(Pecas.Cores.BRANCO);
 
             } else {
-                if (x1 - x2 == 0) {
+                if (y1 == y2) {
                     System.out.println("O peão não pode comer para frente");
                     return;
 
@@ -199,29 +199,19 @@ public class Tabuleiro {
     }
 
     // Verificando se o caminho esta limpo para pecas - Rainha, Torre e Bispo
-    public boolean caminhoLimpo(int x1, int y1, int x2, int y2){
-        int deltaX = x2 - x1;
-        int deltaY = y2 - y1;
+    public boolean caminhoLimpo(int x1, int y1, int x2, int y2) {
+        int deltaX = Integer.compare(x2, x1);
+        int deltaY = Integer.compare(y2, y1);
 
-        // Movimento vertical
-        if (deltaX == 0) {
-            for (int i = y1; i < Math.abs(deltaY); i = i + (deltaY / Math.abs(deltaY))) {
-                if (!((pecas[x1][i]) instanceof Vazio)) return false;
-            }
+        int x = x1 + deltaX;
+        int y = y1 + deltaY;
 
-        } else if (deltaY == 0) {
-            for (int i = x1; i < Math.abs(deltaX); i = i + (deltaX / Math.abs(deltaX))) {
-                if (!((pecas[i][y1]) instanceof Vazio)) return false;
-            }
-
-        } else {
-            int i = x1; int j = y1;
-            for (; i < Math.abs(deltaX) && j < Math.abs(deltaY); i = i + (deltaX / Math.abs(deltaX)), j = j + (deltaY / Math.abs(deltaY))) {
-                if (!(pecas[i][j] instanceof Vazio)) return false;
-            }
-
-
+        while (x != x2 || y != y2) {
+            if (!(pecas[x][y] instanceof Vazio)) return false;
+            x += deltaX;
+            y += deltaY;
         }
+
         return true;
     }
 
