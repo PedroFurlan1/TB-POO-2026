@@ -93,10 +93,10 @@ public class Tabuleiro {
 
         // Primeiro vamos pegar a peça na posicao incial
         Pecas pecaAux = pecas[x1][y1];
-        Pecas pecaAnterior = pecas[x1][y1];
+
 
         // Verificamos se a peca e valida
-        if (!(pecaAux.is_valid(x1, y1, x2, y2))) {
+        if (!(pecas[x1][y1].is_valid(x1, y1, x2, y2))) {
             System.out.println("Movimento invalido para essa peça");
             return;
         }
@@ -104,22 +104,22 @@ public class Tabuleiro {
         // Precisamos verficar se e uma ação de comer - Peao é o unico que come diferente - caso a parte para verificar se é valida ainda
         if (!(pecas[x2][y2] instanceof Vazio)) {
             // Verificando se e da mesma cor
-            if (pecas[x2][y2].getCor() == pecaAux.getCor()) {
+            if (pecas[x2][y2].getCor() == pecas[x1][y1].getCor()) {
                 System.out.println("Erro: É possivel apenas comer peças de cores diferentes");
                 return;
             }
 
 
             // Verificando se tem alguma peça no caminho
-            if ((pecaAux instanceof Rainha || pecaAux instanceof Torre || pecaAux instanceof Bispo) && !(caminhoLimpo(x1, y1, x2, y2))) {
+            if ((pecas[x1][y1] instanceof Rainha || pecas[x1][y1] instanceof Torre || pecas[x1][y1] instanceof Bispo) && !(caminhoLimpo(x1, y1, x2, y2))) {
                 System.out.println("Erro: Há peças no caminho");
                 return;
             }
 
             // Ação de comer - peao come diferentes
-            if (!(pecaAux instanceof Peao)) {
-                pecas[x2][y2] = pecaAux;
-                pecaAux = new Vazio(Pecas.Cores.NEUTRA);
+            if (!(pecas[x1][y1] instanceof Peao)) {
+                pecas[x2][y2] = pecas[x1][y1];
+                pecas[x1][y1] = new Vazio(Pecas.Cores.NEUTRA);
 
             } else {
                 if (y1 == y2) {
@@ -127,36 +127,36 @@ public class Tabuleiro {
                     return;
 
                 } else {
-                    pecas[x2][y2] = pecaAux;
-                    pecaAux = new Vazio(Pecas.Cores.NEUTRA);
+                    pecas[x2][y2] = pecas[x1][y1];
+                    pecas[x1][y1] = new Vazio(Pecas.Cores.NEUTRA);
                 }
             }
 
         } else {
             // Verificando se peao esta andando corretamente
-            if (pecaAux instanceof Peao && (y1 - y2) != 0) {
+            if (pecas[x1][y1] instanceof Peao && (y1 - y2) != 0) {
                 System.out.println("Erro: O peao pode apenas andar para frente");
                 return;
             }
 
-            if ((pecaAux instanceof Rainha || pecaAux instanceof Torre || pecaAux instanceof Bispo) && !(caminhoLimpo(x1, y1, x2, y2))) {
+            if ((pecas[x1][y1] instanceof Rainha || pecas[x1][y1] instanceof Torre || pecas[x1][y1] instanceof Bispo) && !(caminhoLimpo(x1, y1, x2, y2))) {
                 System.out.println("Erro: Há peças no caminho");
                 return;
             }
 
             // Trocamos o vazio por ela
-            pecas[x2][y2] = pecaAux;
-            pecaAux = new Vazio(Pecas.Cores.NEUTRA);
+            pecas[x2][y2] = pecas[x1][y1];
+            pecas[x1][y1] = new Vazio(Pecas.Cores.NEUTRA);
 
         }
-        if (pecaAnterior instanceof Peao ) ((Peao) pecaAnterior).incrementarMovimento();
+        if (pecaAux instanceof Peao ) ((Peao) pecaAux).incrementarMovimento();
 
         return;
     }
 
     public int[] tratarJogada(String pos1, String pos2) {
         // Vertifica o tamanho
-        if (pos1.length() > 2 || pos2.length() > 2) {
+        if (pos1.length() != 2 || pos2.length() != 2) {
             System.out.println("Erro: Tamanho de pos incial ou final errado");
             return null;
         }
@@ -183,7 +183,7 @@ public class Tabuleiro {
 
         // Verificando o limite
         if ((x1 <1 || x1 > 8) || (x2 <1 || x2 > 8)) {
-            System.out.println("Erro: O valor da linha deve ser de 0 a 8");
+            System.out.println("Erro: O valor da linha deve ser de 1 a 8");
             return null;
         }
 
@@ -230,7 +230,7 @@ public class Tabuleiro {
 
 
     // Mostra tabuleiro
-    public void mostraTabuleiro(Pecas[][] pecas) {
+    public void mostraTabuleiro() {
         //Criando e printando o vetor com as letras que estarão nas colunas
         char[] letras = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
         System.out.print(" \t");

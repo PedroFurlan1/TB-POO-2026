@@ -17,17 +17,15 @@ public class Peao extends Pecas implements  ValidarJogadas {
     // Metodos
     @Override
     public boolean is_valid(int x1, int y1, int x2, int y2) {
-        // Primeiro verificamos se a peça se moveu
         if (super.samPlace(x1, y1, x2, y2)) return false;
 
-        // Agora validaremos a jogada
-        // Movimento para preças brancas e movimento para frente | movimento para preças brancas e pretas de comer | movimento para peças brancas e pretas pularem 2 casas
-        if (super.cor == Cores.BRANCO && (((x1-x2) == 0 && (y1-y2) == -1) || ((y1-y2) == -1) && ((x1-x2) == -1 || (x1-x2) == 1))) return true;
-        else if (super.cor == Cores.PRETO && (((x1-x2) == 0 && (y1-y2) == 1) || ((y1-y2) == 1) && ((x1-x2) == -1 || (x1-x2) == 1))) return true;
-        else if (super.cor == Cores.BRANCO && ((this.numMovimento == 0) && (x1-x2) == 0) && (y1-y2) == -2) return true;
-        else if (super.cor == Cores.PRETO && ((this.numMovimento == 0) && (x1-x2) == 0) && (y1-y2) == 2) return true;
+        int direcao = (super.cor == Cores.BRANCO) ? 1 : -1;
 
-        return false;
+        boolean andouReto  = (y1 == y2) && (x2 - x1 == direcao);
+        boolean andouDuplo = (y1 == y2) && (numMovimento == 0) && (x2 - x1 == 2 * direcao);
+        boolean capturou   = (Math.abs(y2 - y1) == 1) && (x2 - x1 == direcao);
+
+        return andouReto || andouDuplo || capturou;
     }
 
     public void incrementarMovimento () {this.numMovimento++;}
