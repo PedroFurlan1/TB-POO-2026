@@ -44,7 +44,7 @@ public class Tabuleiro {
         // Peoes
         i = 0;
         for (; i < tam; i++) {
-            pecas[1][i] = new Peao(Pecas.Cores.BRANCO)
+            pecas[1][i] = new Peao(Pecas.Cores.BRANCO);
         };
 
         // Pretas
@@ -100,10 +100,18 @@ public class Tabuleiro {
             return;
         }
 
-        // Precisamos verficar se e uma acao de comer - Peao é o unico que come diferente - caso a parte para verificar se é valida ainda
+        // Precisamos verficar se e uma ação de comer - Peao é o unico que come diferente - caso a parte para verificar se é valida ainda
         if (!(pecas[x2][y2] instanceof Vazio)) {
+            // Verificando se e da mesma cor
             if (pecas[x2][y2].getCor() == pecas[x1][y1].getCor()) {
                 System.out.println("Erro: É possivel apenas comer peças de cores diferentes");
+                return;
+            }
+
+
+            // Verificando se tem alguma peça no caminho
+            if ((pecas[x1][x2] instanceof Rainha) || (pecas[x1][x2] instanceof Torre) || (pecas[x1][x2] instanceof Bispo) && !(caminhoLimpo(x1, y2, x1, y2))) {
+                System.out.println("Erro: Há peças no caminho");
                 return;
             }
 
@@ -113,7 +121,14 @@ public class Tabuleiro {
                 pecas[x1][y1] = new Vazio(Pecas.Cores.BRANCO);
 
             } else {
-                // Fazer comida do peao
+                if (x1 - x2 == 0) {
+                    System.out.println("O peão não pode comer para frente");
+                    return;
+
+                } else {
+                    pecas[x2][y2] = pecas[x1][y1];
+                    pecas[x1][y1] = new Vazio(Pecas.Cores.BRANCO);
+                }
             }
 
         } else {
@@ -169,18 +184,49 @@ public class Tabuleiro {
         int y1 = mapaLinhas.get(col1);
         int y2 = mapaLinhas.get(col2);
 
+        // Verificando se saiu do lugar
+        if (x1 == x2 && y1 == y2) {
+            System.out.println("Erro: A peça não saiu do lugar");
+            return null;
+        }
+
         // Retornando
+
 
         return new int[]{x1, y1, x2, y2};
 
 
     }
 
+    // Verificando se o caminho esta limpo para pecas - Rainha, Torre e Bispo
     public boolean caminhoLimpo(int x1, int y1, int x2, int y2){
-        System.out.println("fazer");
-        return True;
+        int deltaX = x2 - x1;
+        int deltaY = y2 - y1;
+
+        // Movimento vertical
+        if (deltaX == 0) {
+            for (int i = y1; i < Math.abs(deltaY); i = i + (deltaY / Math.abs(deltaY))) {
+                if (!((pecas[x1][i]) instanceof Vazio)) return false;
+            }
+
+        } else if (deltaY == 0) {
+            for (int i = x1; i < Math.abs(deltaX); i = i + (deltaX / Math.abs(deltaX))) {
+                if (!((pecas[i][y1]) instanceof Vazio)) return false;
+            }
+
+        } else {
+            int i = x1; int j = y1;
+            for (; i < Math.abs(deltaX) && j < Math.abs(deltaY); i = i + (deltaX / Math.abs(deltaX)), j = j + (deltaY / Math.abs(deltaY))) {
+                if (!(pecas[i][j] instanceof Vazio)) return false;
+            }
+
+
+        }
+        return true;
     }
 
+
+    // Mostra tabuleiro
     public void mostraTabuleiro(Pecas[][] pecas) {
         //Criando e printando o vetor com as letras que estarão nas colunas
         char[] letras = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
@@ -200,22 +246,22 @@ public class Tabuleiro {
                 switch(pecas[i][j].getCor()) {                     //Switch para separar as peças pretas das brancas
                     case PRETO:
                         switch (pecas[i][j]) {                     //Switch para printar de acordo com o tipo da peça
-                            case Rei rei -> System.out.printf("♚\t");
-                            case Rainha rainha -> System.out.printf("♛\t");
-                            case Torre torre -> System.out.printf("♜\t");
-                            case Bispo bispo -> System.out.printf("♝\t");
-                            case Cavalo cavalo -> System.out.printf("♞\t");
-                            case null, default -> System.out.printf("♟\t");
+                            case Rei rei -> System.out.print("♚\t");
+                            case Rainha rainha -> System.out.print("♛\t");
+                            case Torre torre -> System.out.print("♜\t");
+                            case Bispo bispo -> System.out.print("♝\t");
+                            case Cavalo cavalo -> System.out.print("♞\t");
+                            case null, default -> System.out.print("♟\t");
                         }
                         break;
                     case BRANCO:
                         switch (pecas[i][j]) {                      //Switch para printar de acordo com o tipo da peça
-                            case Rei rei -> System.out.printf("♔\t");
-                            case Rainha rainha -> System.out.printf("♕\t");
-                            case Torre torre -> System.out.printf("♖\t");
-                            case Bispo bispo -> System.out.printf("♗\t");
-                            case Cavalo cavalo -> System.out.printf("♘\t");
-                            case null, default -> System.out.printf("♙\t");
+                            case Rei rei -> System.out.print("♔\t");
+                            case Rainha rainha -> System.out.print("♕\t");
+                            case Torre torre -> System.out.print("♖\t");
+                            case Bispo bispo -> System.out.print("♗\t");
+                            case Cavalo cavalo -> System.out.print("♘\t");
+                            case null, default -> System.out.print("♙\t");
 
                         }
                         break;
