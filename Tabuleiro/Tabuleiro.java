@@ -13,7 +13,7 @@ public class Tabuleiro {
     private Pecas[][] pecas;
     private final int tam = 8;
     public final Map<Character, Integer> mapaLinhas = Map.of(
-            'a', 0, 'b', 1, 'c', 2, 'd', 3, 'e', 4, 'f', 5, 'h', 6, 'i', 7
+            'a', 0, 'b', 1, 'c', 2, 'd', 3, 'e', 4, 'f', 5, 'g', 6, 'h', 7
     );
 
     // Constutor (inicializa o tabuleiro)
@@ -73,9 +73,9 @@ public class Tabuleiro {
 
         // Vazias
         i = 2; j = 0;
-        for (;i < 5; i++) {
+        for (;i <= 5; i++) {
             for (j = 0;j < tam; j++) {
-                pecas[i][j] = new Vazio(Pecas.Cores.BRANCO);
+                pecas[i][j] = new Vazio(Pecas.Cores.NEUTRA);
             }
         }
     }
@@ -93,6 +93,7 @@ public class Tabuleiro {
 
         // Primeiro vamos pegar a peça na posicao incial
         Pecas pecaAux = pecas[x1][y1];
+        Pecas pecaAnterior = pecas[x1][y1];
 
         // Verificamos se a peca e valida
         if (!(pecaAux.is_valid(x1, y1, x2, y2))) {
@@ -103,22 +104,22 @@ public class Tabuleiro {
         // Precisamos verficar se e uma ação de comer - Peao é o unico que come diferente - caso a parte para verificar se é valida ainda
         if (!(pecas[x2][y2] instanceof Vazio)) {
             // Verificando se e da mesma cor
-            if (pecas[x2][y2].getCor() == pecas[x1][y1].getCor()) {
+            if (pecas[x2][y2].getCor() == pecaAux.getCor()) {
                 System.out.println("Erro: É possivel apenas comer peças de cores diferentes");
                 return;
             }
 
 
             // Verificando se tem alguma peça no caminho
-            if ((pecas[x1][y1] instanceof Rainha || pecas[x1][y1] instanceof Torre || pecas[x1][y1] instanceof Bispo) && !(caminhoLimpo(x1, y1, x2, y2))) {
+            if ((pecaAux instanceof Rainha || pecaAux instanceof Torre || pecaAux instanceof Bispo) && !(caminhoLimpo(x1, y1, x2, y2))) {
                 System.out.println("Erro: Há peças no caminho");
                 return;
             }
 
             // Ação de comer - peao come diferentes
-            if (!(pecas[x1][y1] instanceof Peao)) {
-                pecas[x2][y2] = pecas[x1][y1];
-                pecas[x1][y1] = new Vazio(Pecas.Cores.BRANCO);
+            if (!(pecaAux instanceof Peao)) {
+                pecas[x2][y2] = pecaAux;
+                pecaAux = new Vazio(Pecas.Cores.NEUTRA);
 
             } else {
                 if (y1 == y2) {
@@ -126,19 +127,31 @@ public class Tabuleiro {
                     return;
 
                 } else {
-                    pecas[x2][y2] = pecas[x1][y1];
-                    pecas[x1][y1] = new Vazio(Pecas.Cores.BRANCO);
+                    pecas[x2][y2] = pecaAux;
+                    pecaAux = new Vazio(Pecas.Cores.NEUTRA);
                 }
             }
 
         } else {
+            // Verificando se peao esta andando corretamente
+            if (pecaAux instanceof Peao && (y1 - y2) != 0) {
+                System.out.println("Erro: O peao pode apenas andar para frente");
+                return;
+            }
+
+            if ((pecaAux instanceof Rainha || pecaAux instanceof Torre || pecaAux instanceof Bispo) && !(caminhoLimpo(x1, y1, x2, y2))) {
+                System.out.println("Erro: Há peças no caminho");
+                return;
+            }
+
             // Trocamos o vazio por ela
-            pecas[x2][y2] = pecas[x1][y1];
-            pecas[x1][y1] = new Vazio(Pecas.Cores.BRANCO);
+            pecas[x2][y2] = pecaAux;
+            pecaAux = new Vazio(Pecas.Cores.NEUTRA);
 
         }
+        if (pecaAnterior instanceof Peao ) ((Peao) pecaAnterior).incrementarMovimento();
 
-
+        return;
     }
 
     public int[] tratarJogada(String pos1, String pos2) {
@@ -169,7 +182,7 @@ public class Tabuleiro {
         int x2 = Character.getNumericValue(lin2);
 
         // Verificando o limite
-        if ((x1 <0 || x1 > 8) || (x2 <0 || x2 > 8)) {
+        if ((x1 <1 || x1 > 8) || (x2 <1 || x2 > 8)) {
             System.out.println("Erro: O valor da linha deve ser de 0 a 8");
             return null;
         }
@@ -229,8 +242,8 @@ public class Tabuleiro {
             System.out.println();                 //Espaço entre as linhas
             System.out.printf("%d\t", i);         //Printando os números das linhas
             for(int j = 0; j< 8; j++) {
-                if (pecas[i][j] == null) {
-                    System.out.printf(".\t");                    //Printando . caso o espaço esteja vazio
+                if (pecas[i][j] instanceof Vazio) {
+                    System.out.print(".\t");                    //Printando . caso o espaço esteja vazio
                     continue;
                 }
                 switch(pecas[i][j].getCor()) {                     //Switch para separar as peças pretas das brancas

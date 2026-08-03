@@ -8,7 +8,8 @@ public class Pecas {
     // ENUM de cores
     public enum Cores {
         PRETO,
-        BRANCO
+        BRANCO,
+        NEUTRA
     };
 
 
