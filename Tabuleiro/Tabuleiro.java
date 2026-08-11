@@ -1,3 +1,5 @@
+package Tabuleiro;
+
 import pecas.Pecas;
 import java.util.*;
 import pecas.cavalo.Cavalo;
@@ -12,7 +14,7 @@ public class Tabuleiro {
     // Atributos
     private Pecas[][] pecas;
     private final int tam = 8;
-    public final Map<Character, Integer> mapaLinhas = Map.of(
+    public final Map<Character, Integer> mapaColunas = Map.of(
             'a', 0, 'b', 1, 'c', 2, 'd', 3, 'e', 4, 'f', 5, 'g', 6, 'h', 7
     );
 
@@ -84,10 +86,10 @@ public class Tabuleiro {
     // Metodos
 
     // Responsavel pelas jogadas de movimentacao
-    public void movimentar(String pos1, String pos2) {
+    public boolean movimentar(String pos1, String pos2) {
         // Primeiro precisamos pegar os valores das posicoes
         int[] vetor = tratarJogada(pos1, pos2);
-        if (vetor == null) return;
+        if (vetor == null) return false;
 
         int x1 = vetor[0] - 1; int y1 = vetor[1]; int x2 = vetor[2] - 1; int y2 = vetor[3];
 
@@ -98,7 +100,7 @@ public class Tabuleiro {
         // Verificamos se a peca e valida
         if (!(pecas[x1][y1].is_valid(x1, y1, x2, y2))) {
             System.out.println("Movimento invalido para essa peça");
-            return;
+            return false;
         }
 
         // Precisamos verficar se e uma ação de comer - Peao é o unico que come diferente - caso a parte para verificar se é valida ainda
@@ -106,14 +108,14 @@ public class Tabuleiro {
             // Verificando se e da mesma cor
             if (pecas[x2][y2].getCor() == pecas[x1][y1].getCor()) {
                 System.out.println("Erro: É possivel apenas comer peças de cores diferentes");
-                return;
+                return false;
             }
 
 
             // Verificando se tem alguma peça no caminho
             if ((pecas[x1][y1] instanceof Rainha || pecas[x1][y1] instanceof Torre || pecas[x1][y1] instanceof Bispo) && !(caminhoLimpo(x1, y1, x2, y2))) {
                 System.out.println("Erro: Há peças no caminho");
-                return;
+                return false;
             }
 
             // Ação de comer - peao come diferentes
@@ -124,7 +126,7 @@ public class Tabuleiro {
             } else {
                 if (y1 == y2) {
                     System.out.println("O peão não pode comer para frente");
-                    return;
+                    return false;
 
                 } else {
                     pecas[x2][y2] = pecas[x1][y1];
@@ -136,12 +138,12 @@ public class Tabuleiro {
             // Verificando se peao esta andando corretamente
             if (pecas[x1][y1] instanceof Peao && (y1 - y2) != 0) {
                 System.out.println("Erro: O peao pode apenas andar para frente");
-                return;
+                return false;
             }
 
             if ((pecas[x1][y1] instanceof Rainha || pecas[x1][y1] instanceof Torre || pecas[x1][y1] instanceof Bispo) && !(caminhoLimpo(x1, y1, x2, y2))) {
                 System.out.println("Erro: Há peças no caminho");
-                return;
+                return false;
             }
 
             // Trocamos o vazio por ela
@@ -151,9 +153,10 @@ public class Tabuleiro {
         }
         if (pecaAux instanceof Peao ) ((Peao) pecaAux).incrementarMovimento();
 
-        return;
+        return true;
     }
 
+    // Verifica se as jogadas estão dentros dos conformes do tabuleiro
     public int[] tratarJogada(String pos1, String pos2) {
         // Vertifica o tamanho
         if (pos1.length() != 2 || pos2.length() != 2) {
@@ -188,14 +191,14 @@ public class Tabuleiro {
         }
 
         // Verificando chaves
-        if (!(mapaLinhas.containsKey(col1)) || !(mapaLinhas.containsKey(col2))) {
+        if (!(mapaColunas.containsKey(col1)) || !(mapaColunas.containsKey(col2))) {
             System.out.println("Erro: O valor da coluna deve ser a, b, c, d, e, f, h ou i");
             return null;
         }
 
         // Verificando a outra entrada
-        int y1 = mapaLinhas.get(col1);
-        int y2 = mapaLinhas.get(col2);
+        int y1 = mapaColunas.get(col1);
+        int y2 = mapaColunas.get(col2);
 
         // Verificando se saiu do lugar
         if (x1 == x2 && y1 == y2) {
@@ -274,5 +277,16 @@ public class Tabuleiro {
             System.out.println();
         }
     }
+
+    public boolean conferirColuna(Character pos) {
+        return mapaColunas.containsKey(pos);
+    }
+
+    public Boolean getCorPeca(String pos, Pecas.Cores cor) {
+        Pecas pecasAux = pecas[Character.getNumericValue(pos.charAt(0))][Character.getNumericValue(pos.charAt(1))];
+        return (pecasAux.getCor() == cor);
+    }
+
+
 
 }

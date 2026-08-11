@@ -1,6 +1,7 @@
 import Jogadores.JogadorComputador;
 import Jogadores.JogadorHumano;
 import Jogo.JogoXadrez;
+import Tabuleiro.Tabuleiro;
 
 import java.util.Scanner;
 
@@ -20,13 +21,15 @@ public class Main {
             // Criar Jogo Humano x Humano
             JogadorHumano jogador1 = new JogadorHumano();
             JogadorHumano jogador2 = new JogadorHumano();
-            JogoXadrez jogo = new JogoXadrez(jogador1, jogador2);
+            Tabuleiro tabuleiro = new Tabuleiro();
+            JogoXadrez jogo = new JogoXadrez(jogador1, jogador2, tabuleiro);
 
         } else {
             // Criar Jogo Humano x Maquina
             JogadorHumano jogador1 = new JogadorHumano();
             JogadorComputador jogadorComputador = new JogadorComputador();
-            JogoXadrez jogo = new JogoXadrez(jogador1, jogadorComputador);
+            Tabuleiro tabuleiro = new Tabuleiro();
+            JogoXadrez jogo = new JogoXadrez(jogador1, jogadorComputador, tabuleiro);
 
 
         }
