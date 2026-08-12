@@ -6,6 +6,13 @@ import Jogadores.JogadorHumano;
 import Tabuleiro.Tabuleiro;
 import com.sun.jdi.event.StepEvent;
 import pecas.Pecas;
+import pecas.cavalo.Cavalo;
+import pecas.peao.Peao;
+import pecas.bispo.Bispo;
+import pecas.torre.Torre;
+import pecas.rainha.Rainha;
+import pecas.rei.Rei;
+import pecas.vazio.Vazio;
 
 import java.util.Scanner;
 
@@ -111,5 +118,53 @@ public class JogoXadrez {
 
 
 
+    }
+
+    public boolean isCheck(Tabuleiro table, Pecas.Cores cor) {
+        int xaux = -1, yaux = -1;
+
+        // 1. Encontra a posição do Rei da cor informada
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Pecas pecaAtual = table.getPeca(i, j);
+                if (pecaAtual instanceof Rei && pecaAtual.getCor() == cor) {
+                    xaux = i;
+                    yaux = j;
+                    i = 8; // Encerra a busca ao achar o Rei
+                    break;
+                }
+            }
+        }
+
+        if (xaux == -1 || yaux == -1) return false;
+
+        // Verifica se alguma peça inimiga ameaça o Rei
+        for (int k = 0; k < 8; k++) {
+            for (int w = 0; w < 8; w++) {
+                Pecas temp = table.getPeca(k, w);
+
+                if (!(temp instanceof Vazio) && temp.getCor() != cor) {
+
+                    // Se for Peão, só está em xeque se for captura em diagonal
+                    if (temp instanceof Peao) {
+                        int direcao = (temp.getCor() == Pecas.Cores.BRANCO) ? 1 : -1;
+
+                        // Verifica se o Rei está exatamente no destino da diagonal do peão
+                        if (xaux - k == direcao && Math.abs(yaux - w) == 1) {
+                            return true;
+                        }
+                    }
+                    // Demais peças usam o is_valid
+                    else if (temp.is_valid(k, w, xaux, yaux)) {
+                        boolean precisaCaminhoLimpo = (temp instanceof Rainha || temp instanceof Torre || temp instanceof Bispo);
+
+                        if (!precisaCaminhoLimpo || table.caminhoLimpo(k, w, xaux, yaux)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

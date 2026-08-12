@@ -287,6 +287,8 @@ public class Tabuleiro {
         return (pecasAux.getCor() == cor);
     }
 
-
+    public Pecas getPeca(int i, int j) {
+        return this.pecas[i][j];
+    }
 
 }
