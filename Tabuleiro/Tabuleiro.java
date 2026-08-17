@@ -295,4 +295,32 @@ public class Tabuleiro {
     public void substituirPeca(int linha, int coluna, Pecas novaPeca) {
         this.pecas[linha][coluna] = novaPeca;
     }
+
+    public boolean movimentoValidoSimulacao(int x1, int y1, int x2, int y2) {
+        Pecas pOrigem = pecas[x1][y1];
+        Pecas pDestino = pecas[x2][y2];
+
+        if (pOrigem instanceof Vazio) return false;
+        if (!pOrigem.is_valid(x1, y1, x2, y2)) return false;
+
+        // Validação de captura e movimentação
+        if (!(pDestino instanceof Vazio)) {
+            if (pDestino.getCor() == pOrigem.getCor()) return false;
+
+            // Peão só pode capturar se for na diagonal (diferença de coluna igual a 1)
+            if (pOrigem instanceof Peao && Math.abs(y1 - y2) != 1) return false;
+        } else {
+            // Peão só pode andar reto no vazio (diferença de coluna deve ser 0)
+            if (pOrigem instanceof Peao && y1 != y2) return false;
+        }
+
+        // Caminho limpo para peças de longo alcance
+        if ((pOrigem instanceof Rainha || pOrigem instanceof Torre || pOrigem instanceof Bispo)
+                && !caminhoLimpo(x1, y1, x2, y2)) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

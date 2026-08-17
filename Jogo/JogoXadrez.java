@@ -4,7 +4,6 @@ import Jogadores.Jogador;
 import Jogadores.JogadorComputador;
 import Jogadores.JogadorHumano;
 import Tabuleiro.Tabuleiro;
-import com.sun.jdi.event.StepEvent;
 import pecas.Pecas;
 import pecas.cavalo.Cavalo;
 import pecas.peao.Peao;
@@ -125,10 +124,10 @@ public class JogoXadrez {
 
     }
 
-    public boolean isCheck(Tabuleiro table, Pecas.Cores cor) {
+    public boolean isXeque(Tabuleiro table, Pecas.Cores cor) {
         int xaux = -1, yaux = -1;
 
-        // 1. Encontra a posição do Rei da cor informada
+        // Encontra a posição do Rei da cor informada
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Pecas pecaAtual = table.getPeca(i, j);
@@ -210,5 +209,58 @@ public class JogoXadrez {
         
         tabuleiro.substituirPeca(linha, coluna, novaPeca);
     }
-    
+
+
+    public boolean isXequeMate(Tabuleiro table, Pecas.Cores cor) {
+        // Se não está em xeque, não pode ser xeque-mate
+        if (!isXeque(table, cor)) {
+            return false;
+        }
+
+        // Passa por todas as posições do tabuleiro buscando peças da cor atacada
+        for (int x1 = 0; x1 < 8; x1++) {
+            for (int y1 = 0; y1 < 8; y1++) {
+                Pecas pecaAtual = table.getPeca(x1, y1);
+
+                // Se a peça for do jogador sob xeque
+                if (!(pecaAtual instanceof Vazio) && pecaAtual.getCor() == cor) {
+
+                    // Testa mover para todas as posições do tabuleiro (x2, y2)
+                    for (int x2 = 0; x2 < 8; x2++) {
+                        for (int y2 = 0; y2 < 8; y2++) {
+
+                            if (x1 == x2 && y1 == y2) continue;
+
+                            // Verifica se a mecânica da peça permite jogada
+                            if (table.movimentoValidoSimulacao(x1, y1, x2, y2)) {
+
+                                // Simula a jogada
+                                Pecas pecaDestinoOriginal = table.getPeca(x2, y2);
+
+                                table.substituirPeca(x2, y2, pecaAtual);
+                                table.substituirPeca(x1, y1, new Vazio(Pecas.Cores.NEUTRA));
+
+                                // Verifica se o Rei ainda continua em xeque após este movimento
+                                boolean reiAindaEmXeque = isXeque(table, cor);
+
+                                //Desfaz o movimento
+                                table.substituirPeca(x1, y1, pecaAtual);
+                                table.substituirPeca(x2, y2, pecaDestinoOriginal);
+
+                                // Se ao menos um movimento tirar o Rei do xeque, cancela o xeque-mate
+                                if (!reiAindaEmXeque) {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Se testou todas as peças e nenhuma salvou o Rei, é xeque-mate
+        System.out.println("XEQUE-MATE!");
+        return true;
+    }
+
 }
