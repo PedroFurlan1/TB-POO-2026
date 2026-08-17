@@ -291,4 +291,8 @@ public class Tabuleiro {
         return this.pecas[i][j];
     }
 
+// Método para a Promoção do Peão
+    public void substituirPeca(int linha, int coluna, Pecas novaPeca) {
+        this.pecas[linha][coluna] = novaPeca;
+    }
 }

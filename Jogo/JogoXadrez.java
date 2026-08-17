@@ -67,6 +67,9 @@ public class JogoXadrez {
 
 
                 } while (pos == null || !boolCor || !boolMoviment);
+                verificarPromocao(tabuleiro, pos[1]);
+                tabuleiro.mostraTabuleiro();
+              
 
             } else {
                 System.out.println("Turno da peça branca - Digite: Posição Inicial Posição Final ");
@@ -89,6 +92,8 @@ public class JogoXadrez {
 
 
                 } while (pos == null || !boolCor || !boolMoviment);
+                verificarPromocao(tabuleiro, pos[1]);
+                tabuleiro.mostraTabuleiro();
 
             }
             contador++;
@@ -167,4 +172,43 @@ public class JogoXadrez {
         }
         return false;
     }
+    // Método para verificar a promoção do peão
+    public void verificarPromocao(Tabuleiro tabuleiro, String posDestino) {
+        // Converte a string para as posições reais da matriz
+        int linha = Character.getNumericValue(posDestino.charAt(1)) - 1;
+        int coluna = tabuleiro.mapaColunas.get(posDestino.charAt(0));
+        
+        Pecas peca = tabuleiro.getPeca(linha, coluna);
+
+        // Se a peça que chegou ali for um Peão, verifica a promoção
+        if (peca instanceof Peao) {
+            boolean promocaoBranca = (peca.getCor() == Pecas.Cores.BRANCO && linha == 7);
+            boolean promocaoNegra = (peca.getCor() == Pecas.Cores.PRETO && linha == 0);
+
+            if (promocaoBranca || promocaoNegra) {
+                promoverPeao(tabuleiro, linha, coluna, peca.getCor());
+            }
+        }
+    }
+
+    private void promoverPeao(Tabuleiro tabuleiro, int linha, int coluna, Pecas.Cores cor) {
+        System.out.println("\n*** PROMOÇÃO DO PEÃO! ***");
+        System.out.println("Escolha a peça para qual deseja promover:");
+        System.out.println("1 - Rainha | 2 - Torre | 3 - Bispo | 4 - Cavalo");
+        System.out.print("Sua escolha: ");
+        
+        Scanner scanner = new Scanner(System.in);
+        int escolha = scanner.nextInt();
+        
+        Pecas novaPeca;
+        switch (escolha) {
+            case 2: novaPeca = new Torre(cor); break;
+            case 3: novaPeca = new Bispo(cor); break;
+            case 4: novaPeca = new Cavalo(cor); break;
+            default: novaPeca = new Rainha(cor); break;
+        }
+        
+        tabuleiro.substituirPeca(linha, coluna, novaPeca);
+    }
+    
 }
