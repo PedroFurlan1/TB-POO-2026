@@ -23,6 +23,7 @@ public class Main {
             JogadorHumano jogador2 = new JogadorHumano();
             Tabuleiro tabuleiro = new Tabuleiro();
             JogoXadrez jogo = new JogoXadrez(jogador1, jogador2, tabuleiro);
+            jogo.JogarXadrez();
 
         } else {
             // Criar Jogo Humano x Maquina
@@ -30,7 +31,7 @@ public class Main {
             JogadorComputador jogadorComputador = new JogadorComputador();
             Tabuleiro tabuleiro = new Tabuleiro();
             JogoXadrez jogo = new JogoXadrez(jogador1, jogadorComputador, tabuleiro);
-
+            jogo.JogarXadrez();
 
         }
 

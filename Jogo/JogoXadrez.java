@@ -39,11 +39,9 @@ public class JogoXadrez {
         tabuleiro.mostraTabuleiro();
         int contador = 0;
 
-        while (true/*Verificador de xeque-mate || marcador de desistencia || empate*/){
+        while (!(isXequeMate(tabuleiro, Pecas.Cores.BRANCO)) || !(isXequeMate(tabuleiro, Pecas.Cores.PRETO))){
             // Variaveis
             Scanner scanner = new Scanner(System.in);
-
-
             // Se o número da jogada for par = Branco joga, se o número for impar preto joga
             if (contador % 2 ==0) {
                 System.out.println("Turno da peça branca - Digite: Posição Inicial Posição Final ");
@@ -67,8 +65,10 @@ public class JogoXadrez {
 
                 } while (pos == null || !boolCor || !boolMoviment);
                 verificarPromocao(tabuleiro, pos[1]);
+
+                // Veremos se
+
                 tabuleiro.mostraTabuleiro();
-              
 
             } else {
                 System.out.println("Turno da peça branca - Digite: Posição Inicial Posição Final ");
@@ -96,6 +96,14 @@ public class JogoXadrez {
 
             }
             contador++;
+
+            // Mostrando se há xeques
+            if (isXeque(tabuleiro, Pecas.Cores.PRETO)) {
+                System.out.println("Atenção - Peças pretas em xeque");
+            } else if (isXeque(tabuleiro, Pecas.Cores.BRANCO)) {
+                System.out.println("Atenção - Peças brancas em xeque");
+            }
+
         }
 
     }
