@@ -1,13 +1,13 @@
 package Tabuleiro;
 
-import pecas.Pecas;
 import java.util.*;
+import pecas.Pecas;
+import pecas.bispo.Bispo;
 import pecas.cavalo.Cavalo;
 import pecas.peao.Peao;
-import pecas.bispo.Bispo;
-import pecas.torre.Torre;
 import pecas.rainha.Rainha;
 import pecas.rei.Rei;
+import pecas.torre.Torre;
 import pecas.vazio.Vazio;
 
 public class Tabuleiro {
@@ -156,11 +156,20 @@ public class Tabuleiro {
 
                 return false;
             }
+            
 
             // Trocamos o vazio por ela
             pecas[x2][y2] = pecas[x1][y1];
             pecas[x1][y1] = new Vazio(Pecas.Cores.NEUTRA);
 
+            switch (pecas[x1][y1]) {
+                case Rei rei: rei.setMoveu(true); rei.setRoqueCurto(false); rei.setRoqueLongo(false);
+                break;
+                case Torre torre: torre.setMoveu(true); 
+                break;
+                default: 
+                break;
+            }
         }
         if (pecaAux instanceof Peao ) ((Peao) pecaAux).incrementarMovimento();
 

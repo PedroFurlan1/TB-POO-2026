@@ -5,10 +5,13 @@ import pecas.validar_jogadas.ValidarJogadas;
 
 
 public class Torre extends Pecas implements  ValidarJogadas {
+    private boolean moveu;
 
     //Construtor
     public Torre(Pecas.Cores cor) {
         super(cor);
+
+        moveu = false;
     }
 
     // Metodos
@@ -21,6 +24,11 @@ public class Torre extends Pecas implements  ValidarJogadas {
         return true;
     }
 
+    public void setMoveu(boolean moveu) {
+        this.moveu = moveu;
+    }
 
-
+    public boolean getMoveu() {
+        return moveu;
+    }
 }

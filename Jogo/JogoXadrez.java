@@ -4,17 +4,16 @@ import Jogadores.Jogador;
 import Jogadores.JogadorComputador;
 import Jogadores.JogadorHumano;
 import Tabuleiro.Tabuleiro;
-import pecas.Pecas;
-import pecas.cavalo.Cavalo;
-import pecas.peao.Peao;
-import pecas.bispo.Bispo;
-import pecas.torre.Torre;
-import pecas.rainha.Rainha;
-import pecas.rei.Rei;
-import pecas.vazio.Vazio;
-
 import java.util.Random;
 import java.util.Scanner;
+import pecas.Pecas;
+import pecas.bispo.Bispo;
+import pecas.cavalo.Cavalo;
+import pecas.peao.Peao;
+import pecas.rainha.Rainha;
+import pecas.rei.Rei;
+import pecas.torre.Torre;
+import pecas.vazio.Vazio;
 
 public class JogoXadrez {
     // Atributos
@@ -94,6 +93,11 @@ public class JogoXadrez {
                 } while (pos == null || !boolCor || !boolMoviment);
                 verificarPromocao(tabuleiro, pos[1], jogador1);
 
+                atualizarRoque(Pecas.Cores.BRANCO);
+                atualizarRoque(Pecas.Cores.PRETO);
+
+                realizarRoque(Pecas.Cores.BRANCO);
+
                 // Veremos se
 
                 tabuleiro.mostraTabuleiro();
@@ -147,6 +151,11 @@ public class JogoXadrez {
 
                 } while (pos == null || !boolCor || !boolMoviment);
                 verificarPromocao(tabuleiro, pos[1], jogador2);
+
+                atualizarRoque(Pecas.Cores.BRANCO);
+                atualizarRoque(Pecas.Cores.PRETO);
+
+                realizarRoque(Pecas.Cores.PRETO);
                 tabuleiro.mostraTabuleiro();
 
             }
@@ -166,6 +175,7 @@ public class JogoXadrez {
     // Jogando o jogo HUMANO x COMPUTADOR - computador inicia como PRETO
     public void JogarXadrez(JogadorHumano jogador1, JogadorComputador jogador2) {
         System.out.println("------------------ Iniciando jogo de xadrez ------------------ ");
+
         tabuleiro.mostraTabuleiro();
         int contador = 0;
 
@@ -225,6 +235,11 @@ public class JogoXadrez {
                 } while (pos == null || !boolCor || !boolMoviment);
                 verificarPromocao(tabuleiro, pos[1], jogador1);
 
+                atualizarRoque(Pecas.Cores.BRANCO);
+                atualizarRoque(Pecas.Cores.PRETO);
+
+                realizarRoque(Pecas.Cores.BRANCO);
+
                 // Veremos se
 
                 tabuleiro.mostraTabuleiro();
@@ -272,6 +287,11 @@ public class JogoXadrez {
 
                 } while (pos == null || !boolCor || !boolMoviment);
                 verificarPromocao(tabuleiro, pos[1], jogador2);
+
+                atualizarRoque(Pecas.Cores.BRANCO);
+                atualizarRoque(Pecas.Cores.PRETO);
+
+                realizarRoque(Pecas.Cores.PRETO);
 
                 // Veremos se
 
@@ -364,6 +384,127 @@ public class JogoXadrez {
         }
         return false;
     }
+
+    // Atualizar condições de roque dos reis
+    public void atualizarRoque(Pecas.Cores cor) {
+        int linha;
+
+        Rei rei;
+        Torre torre_1 = null, torre_2 = null;
+
+        boolean roqueLongo = true, roqueCurto = true;
+
+        if (cor == Pecas.Cores.BRANCO) 
+            linha = 0;
+        else 
+            linha = 7;
+
+        System.out.println(tabuleiro.getPeca(linha, 4));
+
+        // Se o rei não estiver no lugar dele, nem testar o resto
+        if (!(tabuleiro.getPeca(linha, 4) instanceof Rei)) return;
+
+        rei = (Rei)tabuleiro.getPeca(linha, 4);
+
+        // Se o rei tiver se movido, roque impossível
+        if (rei.getMoveu()) {
+            rei.setRoqueCurto(false);
+            rei.setRoqueLongo(false);
+
+            return;
+        }
+
+        // Se as torres não estiverem em seus lugares, roque impossível
+        if (!(tabuleiro.getPeca(linha, 0) instanceof Torre)) {
+            roqueLongo = false;
+        }
+
+        else torre_1 = (Torre)tabuleiro.getPeca(linha, 0);
+
+        if (!(tabuleiro.getPeca(linha, 7) instanceof Torre)) {
+            roqueCurto = false;
+        }
+
+        else torre_2 = (Torre)tabuleiro.getPeca(linha, 7);
+
+        // Se as torres não tiverem se movido, roque impossível
+        if (torre_1 != null && torre_1.getMoveu()) roqueLongo = false;
+        if (torre_2 != null && torre_2.getMoveu()) roqueCurto = false;
+
+        // Se houver peças entre o rei e a torre, roque impossível
+        if (!(tabuleiro.getPeca(linha, 3) instanceof Vazio) ||
+            !(tabuleiro.getPeca(linha, 2) instanceof Vazio) ||
+            !(tabuleiro.getPeca(linha, 1) instanceof Vazio))  {
+            roqueLongo = false;
+        }
+
+        if (!(tabuleiro.getPeca(linha, 5) instanceof Vazio) ||
+            !(tabuleiro.getPeca(linha, 6) instanceof Vazio)) {
+            roqueCurto = false;
+        }
+
+        // Se o rei ficar em xeque em posições adjacentes ao roque, roque impossível
+
+        Pecas pecaAux1 = tabuleiro.getPeca(linha, 2);
+        Pecas pecaAux2 = tabuleiro.getPeca(linha, 3);
+
+        tabuleiro.substituirPeca(linha, 2, rei);
+        tabuleiro.substituirPeca(linha, 3, rei);
+
+        if (isXeque(tabuleiro, cor)) {
+            rei.setRoqueLongo(false);
+        }
+
+        tabuleiro.substituirPeca(linha, 2, pecaAux1);
+        tabuleiro.substituirPeca(linha, 3, pecaAux2);
+
+        pecaAux1 = tabuleiro.getPeca(linha, 5);
+        pecaAux2 = tabuleiro.getPeca(linha, 6);
+
+        tabuleiro.substituirPeca(linha, 5, rei);
+        tabuleiro.substituirPeca(linha, 6, rei);
+
+        if (isXeque(tabuleiro, cor)) {
+            rei.setRoqueCurto(false);
+        }
+
+        tabuleiro.substituirPeca(linha, 5, pecaAux1);
+        tabuleiro.substituirPeca(linha, 6, pecaAux2);
+
+        rei.setRoqueLongo(roqueLongo);
+        rei.setRoqueCurto(roqueCurto);
+    }
+
+    public void realizarRoque(Pecas.Cores cor) {
+        int linha;
+
+        if (cor == Pecas.Cores.BRANCO) linha = 0;
+        else linha = 7;
+
+        Pecas possivel_roque_1 = tabuleiro.getPeca(linha, 2);
+        Pecas possivel_roque_2 = tabuleiro.getPeca(linha, 6);
+
+        if (possivel_roque_1 instanceof Rei && possivel_roque_1.getCor() == cor) {
+            Rei roque_1 = (Rei)possivel_roque_1;
+            
+            if (roque_1.getRoqueou()) {
+                tabuleiro.substituirPeca(linha, 3, tabuleiro.getPeca(linha, 0));
+                tabuleiro.substituirPeca(linha, 0, new Vazio(Pecas.Cores.NEUTRA));
+                roque_1.setRoqueou(false);
+            }
+        }
+
+        else if (possivel_roque_2 instanceof Rei && possivel_roque_2.getCor() == cor) {
+            Rei roque_2 = (Rei)possivel_roque_2;
+            
+            if (roque_2.getRoqueou()) {
+                tabuleiro.substituirPeca(linha, 5, tabuleiro.getPeca(linha, 7));
+                tabuleiro.substituirPeca(linha, 7, new Vazio(Pecas.Cores.NEUTRA));
+                roque_2.setRoqueou(false);
+            }
+        }
+    }
+
     // Método para verificar a promoção do peão
     public void verificarPromocao(Tabuleiro tabuleiro, String posDestino, Jogador jogadorAtual) {
         int linha = Character.getNumericValue(posDestino.charAt(1)) - 1;
