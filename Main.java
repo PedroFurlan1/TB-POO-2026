@@ -2,6 +2,7 @@ import Jogadores.JogadorComputador;
 import Jogadores.JogadorHumano;
 import Jogo.JogoXadrez;
 import Tabuleiro.Tabuleiro;
+import pecas.Pecas;
 
 import java.util.Scanner;
 
@@ -19,19 +20,19 @@ public class Main {
 
         if (op == 1) {
             // Criar Jogo Humano x Humano
-            JogadorHumano jogador1 = new JogadorHumano();
-            JogadorHumano jogador2 = new JogadorHumano();
+            JogadorHumano jogador1 = new JogadorHumano(Pecas.Cores.PRETO);
+            JogadorHumano jogador2 = new JogadorHumano(Pecas.Cores.BRANCO);
             Tabuleiro tabuleiro = new Tabuleiro();
             JogoXadrez jogo = new JogoXadrez(jogador1, jogador2, tabuleiro);
-            jogo.JogarXadrez();
+            jogo.JogarXadrez(jogador1, jogador2);
 
         } else {
             // Criar Jogo Humano x Maquina
-            JogadorHumano jogador1 = new JogadorHumano();
-            JogadorComputador jogadorComputador = new JogadorComputador();
+            JogadorHumano jogador1 = new JogadorHumano(Pecas.Cores.BRANCO);
+            JogadorComputador jogadorComputador = new JogadorComputador(Pecas.Cores.PRETO);
             Tabuleiro tabuleiro = new Tabuleiro();
             JogoXadrez jogo = new JogoXadrez(jogador1, jogadorComputador, tabuleiro);
-            jogo.JogarXadrez();
+            jogo.JogarXadrez(jogador1, jogadorComputador);
 
         }
 
