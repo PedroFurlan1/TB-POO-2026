@@ -96,7 +96,7 @@ public class Tabuleiro {
     // Metodos
 
     // Responsavel pelas jogadas de movimentacao
-    public boolean movimentar(String pos1, String pos2) {
+    public boolean movimentar(String pos1, String pos2, boolean sim) {
         // Primeiro precisamos pegar os valores das posicoes
         int[] vetor = tratarJogada(pos1, pos2);
         if (vetor == null) return false;
@@ -107,10 +107,8 @@ public class Tabuleiro {
         Pecas pecaAux = pecas[x1][y1];
 
 
-        // Verificamos se a peca e valida
+        // Verificamos se a peca e validaa
         if (!(pecas[x1][y1].is_valid(x1, y1, x2, y2))) {
-
-
             return false;
         }
 
@@ -145,7 +143,43 @@ public class Tabuleiro {
                 }
             }
 
-        } else {
+        }
+
+        else if (pecas[x1][y1] instanceof Peao && pecas[x2][y2] instanceof Vazio && y2 - y1 != 0) {
+            Peao peao = (Peao)pecas[x1][y1];
+
+            if (peao.getCor() == Pecas.Cores.BRANCO && x1 == 4 ||
+                peao.getCor() == Pecas.Cores.PRETO && x1 == 3) {
+                if (y2 < y1) {
+                    Pecas adjacente = pecas[x1][y1-1];
+
+                    if (!(adjacente instanceof Peao) || !((Peao)adjacente).getEnPassant()) {
+                        return false;
+                    }
+
+                    pecas[x2][y2] = pecas[x1][y1];
+                    pecas[x1][y1-1] = new Vazio(Pecas.Cores.NEUTRA);
+                    pecas[x1][y1] = new Vazio(Pecas.Cores.NEUTRA); 
+                }
+
+                else if (y1 < y2) {
+                    Pecas adjacente = pecas[x1][y1+1];
+
+                    if (!(adjacente instanceof Peao) || !((Peao)adjacente).getEnPassant()) {
+                        return false;
+                    }
+
+                    pecas[x2][y2] = pecas[x1][y1];
+                    pecas[x1][y1+1] = new Vazio(Pecas.Cores.NEUTRA);
+                    pecas[x1][y1] = new Vazio(Pecas.Cores.NEUTRA); 
+                }
+            }
+
+            else {
+                return false;
+            }
+        }
+        else {
             // Verificando se peao esta andando corretamente
             if (pecas[x1][y1] instanceof Peao && (y1 - y2) != 0) {
 
@@ -156,11 +190,14 @@ public class Tabuleiro {
 
                 return false;
             }
-            
 
             // Trocamos o vazio por ela
             pecas[x2][y2] = pecas[x1][y1];
             pecas[x1][y1] = new Vazio(Pecas.Cores.NEUTRA);
+
+            if (pecas[x2][y2] instanceof Peao && Math.abs(x2 - x1) == 2) {
+                ((Peao)pecas[x2][y2]).setEnPassant(true);
+            }
 
             switch (pecas[x1][y1]) {
                 case Rei rei: rei.setMoveu(true); rei.setRoqueCurto(false); rei.setRoqueLongo(false);
@@ -171,7 +208,7 @@ public class Tabuleiro {
                 break;
             }
         }
-        if (pecaAux instanceof Peao ) ((Peao) pecaAux).incrementarMovimento();
+        if (pecaAux instanceof Peao && !sim) ((Peao) pecaAux).incrementarMovimento();
 
         return true;
     }
@@ -230,7 +267,6 @@ public class Tabuleiro {
 
 
         return new int[]{x1, y1, x2, y2};
-
 
     }
 

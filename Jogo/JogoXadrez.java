@@ -71,11 +71,10 @@ public class JogoXadrez {
                     }
 
                     if (pos != null && boolCor) {
-
                         // Agora verificamos se a jogada deixa em xeque ou se a jogada permanece em xeque
                         // Vamos criar um tabulueiro auxiliar para simular a jogada
                         Tabuleiro tabAux = new Tabuleiro(tabuleiro);
-                        boolMoviment = tabAux.movimentar(pos[0], pos[1]);
+                        boolMoviment = tabAux.movimentar(pos[0], pos[1], true);
 
                         // Verifica o movimento
                         if (!boolMoviment) System.out.println("Movimento invalido - Jogue novamente");
@@ -85,18 +84,21 @@ public class JogoXadrez {
                                 System.out.println("Movimento invalido - O rei nao pode estar em xeque");
                                 boolMoviment = false;
                             } else {
-                                tabuleiro.movimentar(pos[0], pos[1]);
+                                tabuleiro.movimentar(pos[0], pos[1], false);
                             }
                         }
                     }
 
                 } while (pos == null || !boolCor || !boolMoviment);
+
                 verificarPromocao(tabuleiro, pos[1], jogador1);
 
                 atualizarRoque(Pecas.Cores.BRANCO);
                 atualizarRoque(Pecas.Cores.PRETO);
 
                 realizarRoque(Pecas.Cores.BRANCO);
+
+                atualizarEnPassant(Pecas.Cores.PRETO);
 
                 // Veremos se
 
@@ -134,7 +136,7 @@ public class JogoXadrez {
                         // Agora verificamos se a jogada deixa em xeque ou se a jogada permanece em xeque
                         // Vamos criar um tabulueiro auxiliar para simular a jogada
                         Tabuleiro tabAux = new Tabuleiro(tabuleiro);
-                        boolMoviment = tabAux.movimentar(pos[0], pos[1]);
+                        boolMoviment = tabAux.movimentar(pos[0], pos[1], true);
 
                         // Verifica o movimento
                         if (!boolMoviment) System.out.println("Movimento invalido - Jogue novamente");
@@ -144,7 +146,7 @@ public class JogoXadrez {
                                 System.out.println("Movimento invalido - O rei nao pode estar em xeque");
                                 boolMoviment = false;
                             } else {
-                                tabuleiro.movimentar(pos[0], pos[1]);
+                                tabuleiro.movimentar(pos[0], pos[1], false);
                             }
                         }
                     }
@@ -156,6 +158,8 @@ public class JogoXadrez {
                 atualizarRoque(Pecas.Cores.PRETO);
 
                 realizarRoque(Pecas.Cores.PRETO);
+                atualizarEnPassant(Pecas.Cores.BRANCO);
+
                 tabuleiro.mostraTabuleiro();
 
             }
@@ -216,7 +220,7 @@ public class JogoXadrez {
                         // Agora verificamos se a jogada deixa em xeque ou se a jogada permanece em xeque
                         // Vamos criar um tabulueiro auxiliar para simular a jogada
                         Tabuleiro tabAux = new Tabuleiro(tabuleiro);
-                        boolMoviment = tabAux.movimentar(pos[0], pos[1]);
+                        boolMoviment = tabAux.movimentar(pos[0], pos[1], true);
 
                         // Verifica o movimento
                         if (!boolMoviment) System.out.println("Movimento invalido - Jogue novamente");
@@ -226,7 +230,7 @@ public class JogoXadrez {
                                 System.out.println("Movimento invalido - O rei nao pode estar em xeque");
                                 boolMoviment = false;
                             } else {
-                                tabuleiro.movimentar(pos[0], pos[1]);
+                                tabuleiro.movimentar(pos[0], pos[1], false);
                             }
                         }
                     }
@@ -239,6 +243,8 @@ public class JogoXadrez {
                 atualizarRoque(Pecas.Cores.PRETO);
 
                 realizarRoque(Pecas.Cores.BRANCO);
+
+                atualizarEnPassant(Pecas.Cores.PRETO);
 
                 // Veremos se
 
@@ -268,7 +274,7 @@ public class JogoXadrez {
                         // Agora verificamos se a jogada deixa em xeque ou se a jogada permanece em xeque
                         // Vamos criar um tabulueiro auxiliar para simular a jogada
                         Tabuleiro tabAux = new Tabuleiro(tabuleiro);
-                        boolMoviment = tabAux.movimentar(pos[0], pos[1]);
+                        boolMoviment = tabAux.movimentar(pos[0], pos[1], true);
 
                         // Verifica o movimento
 
@@ -278,7 +284,7 @@ public class JogoXadrez {
                                 System.out.println("Movimento invalido - O rei nao pode estar em xeque");
                                 boolMoviment = false;
                             } else {
-                                tabuleiro.movimentar(pos[0], pos[1]);
+                                tabuleiro.movimentar(pos[0], pos[1], false);
                             }
                         }
                     }
@@ -292,6 +298,8 @@ public class JogoXadrez {
                 atualizarRoque(Pecas.Cores.PRETO);
 
                 realizarRoque(Pecas.Cores.PRETO);
+
+                atualizarEnPassant(Pecas.Cores.BRANCO);
 
                 // Veremos se
 
@@ -332,8 +340,6 @@ public class JogoXadrez {
         }
 
         return new String[]{pos1, pos2};
-
-
 
     }
 
@@ -385,6 +391,27 @@ public class JogoXadrez {
         return false;
     }
 
+    public void atualizarEnPassant(Pecas.Cores cor) {
+        int linha;
+
+        if (cor == Pecas.Cores.BRANCO) {
+            linha = 3;
+        }
+
+        else {
+            linha = 4;
+        }
+
+        for (int i = 0; i < 8; i++)
+        {
+            Pecas peca = tabuleiro.getPeca(linha, i);
+
+            if (peca instanceof Peao && peca.getCor() == cor && ((Peao)peca).getEnPassant()) {
+                ((Peao)peca).setEnPassant(false);
+            } 
+        }
+    }
+
     // Atualizar condições de roque dos reis
     public void atualizarRoque(Pecas.Cores cor) {
         int linha;
@@ -398,8 +425,6 @@ public class JogoXadrez {
             linha = 0;
         else 
             linha = 7;
-
-        System.out.println(tabuleiro.getPeca(linha, 4));
 
         // Se o rei não estiver no lugar dele, nem testar o resto
         if (!(tabuleiro.getPeca(linha, 4) instanceof Rei)) return;

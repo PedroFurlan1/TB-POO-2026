@@ -1,17 +1,17 @@
 package pecas.peao;
 
-import pecas.validar_jogadas.ValidarJogadas;
 import pecas.Pecas;
-
-import static java.lang.Math.abs;
-
+import pecas.validar_jogadas.ValidarJogadas;
 
 public class Peao extends Pecas implements  ValidarJogadas {
     private int numMovimento;
+    private boolean enPassant;
 
     //Construtor
     public Peao(Pecas.Cores cor) {
         super(cor);
+        numMovimento = 0;
+        enPassant = false;
     }
 
     // Metodos
@@ -30,5 +30,11 @@ public class Peao extends Pecas implements  ValidarJogadas {
 
     public void incrementarMovimento () {this.numMovimento++;}
 
+    public void setEnPassant(boolean enPassant) {
+        this.enPassant = enPassant;
+    }
 
+    public boolean getEnPassant() {
+        return enPassant;
+    }
 }
