@@ -44,7 +44,7 @@ public class JogoXadrez {
             // Variaveis
             // Se o número da jogada for par = Branco joga, se o número for impar preto joga
             if (contador % 2 ==0) {
-                System.out.println("Turno da peça branca - Digite: Posição Inicial Posição Final ");
+                System.out.println("Turno da peça branca - Digite: Posição Inicial Posição Final(ou 'desistir') ");
 
 
                 // Outro ‘loop’ até a jogada estar certa - Separador precisa estar correto, jogada ser valida e a peça ser da cor valida
@@ -53,6 +53,11 @@ public class JogoXadrez {
                 boolean boolMoviment = false;
                 do {
                     String jogada = jogador1.realizarJogada();
+                    if (jogada.equalsIgnoreCase("desistir") || jogada.equalsIgnoreCase("ff")) {
+                        System.out.println("\nO jogador de peças BRANCAS desistiu da partida!");
+                        System.out.println("Fim de Jogo: Vitoria das peças PRETAS por desistência.");
+                        return; // Encerra o método e o jogo imediatamente
+                    }
                     // Primeiro vemos se esta correta a posicao
                     pos = separadorJogada(jogada);
 
@@ -80,7 +85,7 @@ public class JogoXadrez {
                 tabuleiro.mostraTabuleiro();
 
             } else {
-                System.out.println("Turno da peça preta - Digite: Posição Inicial Posição Final ");
+                System.out.println("Turno da peça preta - Digite: Posição Inicial Posição Final (ou 'desistir') ");
 
 
                 // Outro ‘loop’ até a jogada estar certa - Separador precisa estar correto, jogada ser valida e a peça ser da cor valida
@@ -89,6 +94,11 @@ public class JogoXadrez {
                 boolean boolMoviment = false;
                 do {
                     String jogada = jogador2.realizarJogada();
+                    if (jogada.equalsIgnoreCase("desistir") || jogada.equalsIgnoreCase("ff")) {
+                        System.out.println("\nO jogador de peças PRETAS desistiu da partida!");
+                        System.out.println("Fim de Jogo: Vitoria das peças BRANCAS por desistência.");
+                        return; // Encerra o método e o jogo imediatamente
+                    }
                     // Primeiro vemos se esta correta a posicao
                     pos = separadorJogada(jogada);
 
@@ -136,7 +146,7 @@ public class JogoXadrez {
             Scanner scanner = new Scanner(System.in);
             // Se o número da jogada for par = Branco joga, se o número for impar preto joga
             if (contador % 2 ==0) {
-                System.out.println("Turno da peça branca - Digite: Posição Inicial Posição Final ");
+                System.out.println("Turno da peça branca - Digite: Posição Inicial Posição Final (ou 'desistir') ");
 
 
                 // Outro ‘loop’ até a jogada estar certa - Separador precisa estar correto, jogada ser valida e a peça ser da cor valida
@@ -145,6 +155,11 @@ public class JogoXadrez {
                 boolean boolMoviment = false;
                 do {
                     String jogada = jogador1.realizarJogada();
+                    if (jogada.equalsIgnoreCase("desistir") || jogada.equalsIgnoreCase("ff")) {
+                        System.out.println("\nO jogador de peças BRANCAS desistiu da partida!");
+                        System.out.println("Fim de Jogo: Vitoria das peças PRETAS por desistência.");
+                        return; // Encerra o método e o jogo imediatamente
+                    }
                     // Primeiro vemos se esta correta a posicao
                     pos = separadorJogada(jogada);
 
