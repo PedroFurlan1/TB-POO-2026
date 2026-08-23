@@ -56,6 +56,8 @@ public class JogoXadrez {
                     // Primeiro vemos se esta correta a posicao
                     pos = separadorJogada(jogada);
 
+                    if (pos == null) System.out.println("Formato de jogada errada - Use posInicial posFinal");
+
                     // Segundo verificamos a cor
                     if (pos != null) {
                         boolCor = tabuleiro.getCorPeca(pos[0], Pecas.Cores.BRANCO);
@@ -67,6 +69,8 @@ public class JogoXadrez {
                     if (pos != null && boolCor) {
                         boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
                     }
+
+                    if (!boolMoviment) System.out.println("Movimento invalido - Jogue novamente");
 
                 } while (pos == null || !boolCor || !boolMoviment);
                 verificarPromocao(tabuleiro, pos[1], jogador1);
@@ -88,6 +92,8 @@ public class JogoXadrez {
                     // Primeiro vemos se esta correta a posicao
                     pos = separadorJogada(jogada);
 
+                    if (pos == null) System.out.println("Formato de jogada errada - Use posInicial posFinal");
+
                     if (pos != null) {
                         boolCor = tabuleiro.getCorPeca(pos[0], Pecas.Cores.PRETO);
                         if (!boolCor) {
@@ -99,6 +105,7 @@ public class JogoXadrez {
                         boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
                     }
 
+                    if (!boolMoviment) System.out.println("Movimento invalido - Jogue novamente");
 
                 } while (pos == null || !boolCor || !boolMoviment);
                 verificarPromocao(tabuleiro, pos[1], jogador2);
@@ -141,6 +148,8 @@ public class JogoXadrez {
                     // Primeiro vemos se esta correta a posicao
                     pos = separadorJogada(jogada);
 
+                    if (pos == null) System.out.println("Formato de jogada errada - Use posInicial posFinal");
+
                     // Segundo verificamos a cor
                     if (pos != null) {
                         boolCor = tabuleiro.getCorPeca(pos[0], Pecas.Cores.BRANCO);
@@ -153,6 +162,8 @@ public class JogoXadrez {
                         boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
                     }
 
+                    if (!boolMoviment) System.out.println("Movimento invalido - Jogue novamente");
+
                 } while (pos == null || !boolCor || !boolMoviment);
                 verificarPromocao(tabuleiro, pos[1], jogador1);
 
@@ -162,7 +173,6 @@ public class JogoXadrez {
 
             } else {
                 // Computador jogando
-                System.out.println("Turno da peça branca - Digite: Posição Inicial Posição Final ");
 
 
                // Verificando a jogada até estar certa
@@ -183,6 +193,8 @@ public class JogoXadrez {
                     if (pos != null && boolCor) {
                         boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
                     }
+
+
 
                 } while (pos == null || !boolCor || !boolMoviment);
                 verificarPromocao(tabuleiro, pos[1], jogador2);
@@ -209,7 +221,7 @@ public class JogoXadrez {
 
     public String[] separadorJogada(String jogada) {
         if (jogada.length() != 5) {
-            System.out.println("Digite a jogada no padrão - Posição inicial(espaço)Posição Final");
+
             return null;
         }
 
@@ -221,7 +233,7 @@ public class JogoXadrez {
         // Verificando se a jogada faz sentido
 
         if (espaco != ' ' || tabuleiro.tratarJogada(pos1, pos2) == null) {
-            System.out.println("Digite a jogada no padrão - Posição inicial(espaço)Posição Final");
+
             return null;
         }
 
@@ -300,7 +312,7 @@ public class JogoXadrez {
 
         if (jogadorAtual instanceof JogadorComputador) {
             // Computador escolhe sozinho, sem pedir input
-            System.out.println("\n*** PROMOÇÃO DO PEÃO (Computador) ***");
+            System.out.println("\n PROMOÇÃO DO PEÃO (Computador) ");
             Random random = new Random();
             int escolha = random.nextInt(4) + 1; // 1 a 4
 
@@ -313,7 +325,7 @@ public class JogoXadrez {
             System.out.println("Computador promoveu o peão para: " + novaPeca.getClass().getSimpleName());
 
         } else {
-            System.out.println("\n*** PROMOÇÃO DO PEÃO! ***");
+            System.out.println("\n PROMOÇÃO DO PEÃO! ");
             System.out.println("Escolha a peça para qual deseja promover:");
             System.out.println("1 - Rainha | 2 - Torre | 3 - Bispo | 4 - Cavalo");
             System.out.print("Sua escolha: ");

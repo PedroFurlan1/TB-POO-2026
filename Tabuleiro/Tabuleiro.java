@@ -99,7 +99,8 @@ public class Tabuleiro {
 
         // Verificamos se a peca e valida
         if (!(pecas[x1][y1].is_valid(x1, y1, x2, y2))) {
-            System.out.println("Movimento invalido para essa peça");
+
+
             return false;
         }
 
@@ -107,14 +108,14 @@ public class Tabuleiro {
         if (!(pecas[x2][y2] instanceof Vazio)) {
             // Verificando se e da mesma cor
             if (pecas[x2][y2].getCor() == pecas[x1][y1].getCor()) {
-                System.out.println("Erro: É possivel apenas comer peças de cores diferentes");
+
                 return false;
             }
 
 
             // Verificando se tem alguma peça no caminho
             if ((pecas[x1][y1] instanceof Rainha || pecas[x1][y1] instanceof Torre || pecas[x1][y1] instanceof Bispo) && !(caminhoLimpo(x1, y1, x2, y2))) {
-                System.out.println("Erro: Há peças no caminho");
+
                 return false;
             }
 
@@ -125,7 +126,7 @@ public class Tabuleiro {
 
             } else {
                 if (y1 == y2) {
-                    System.out.println("O peão não pode comer para frente");
+
                     return false;
 
                 } else {
@@ -137,12 +138,12 @@ public class Tabuleiro {
         } else {
             // Verificando se peao esta andando corretamente
             if (pecas[x1][y1] instanceof Peao && (y1 - y2) != 0) {
-                System.out.println("Erro: O peao pode apenas andar para frente");
+
                 return false;
             }
 
             if ((pecas[x1][y1] instanceof Rainha || pecas[x1][y1] instanceof Torre || pecas[x1][y1] instanceof Bispo) && !(caminhoLimpo(x1, y1, x2, y2))) {
-                System.out.println("Erro: Há peças no caminho");
+
                 return false;
             }
 
@@ -160,7 +161,7 @@ public class Tabuleiro {
     public int[] tratarJogada(String pos1, String pos2) {
         // Vertifica o tamanho
         if (pos1.length() != 2 || pos2.length() != 2) {
-            System.out.println("Erro: Tamanho de pos incial ou final errado");
+
             return null;
         }
 
@@ -172,12 +173,12 @@ public class Tabuleiro {
 
         // Verificando os tipos
         if (!(Character.isDigit(lin1)) || !(Character.isDigit(lin2))) {
-            System.out.println("Erro: linhas devem ser digitos");
+
             return null;
         }
 
         if ((Character.isDigit(col1)) || (Character.isDigit(col2))) {
-            System.out.println("Erro: linhas devem ser caracteres");
+
             return null;
         }
 
@@ -186,13 +187,13 @@ public class Tabuleiro {
 
         // Verificando o limite
         if ((x1 <1 || x1 > 8) || (x2 <1 || x2 > 8)) {
-            System.out.println("Erro: O valor da linha deve ser de 1 a 8");
+
             return null;
         }
 
         // Verificando chaves
         if (!(mapaColunas.containsKey(col1)) || !(mapaColunas.containsKey(col2))) {
-            System.out.println("Erro: O valor da coluna deve ser a, b, c, d, e, f, h ou i");
+
             return null;
         }
 
@@ -202,7 +203,7 @@ public class Tabuleiro {
 
         // Verificando se saiu do lugar
         if (x1 == x2 && y1 == y2) {
-            System.out.println("Erro: A peça não saiu do lugar");
+
             return null;
         }
 

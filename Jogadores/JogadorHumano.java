@@ -9,6 +9,7 @@ public class JogadorHumano extends Jogador implements Jogar{
 
     public JogadorHumano(Pecas.Cores cor) {
         super(cor);
+        this.scanner = new Scanner(System.in);
     }
 
 
