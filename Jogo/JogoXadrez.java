@@ -72,10 +72,24 @@ public class JogoXadrez {
                     }
 
                     if (pos != null && boolCor) {
-                        boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
-                    }
 
-                    if (!boolMoviment) System.out.println("Movimento invalido - Jogue novamente");
+                        // Agora verificamos se a jogada deixa em xeque ou se a jogada permanece em xeque
+                        // Vamos criar um tabulueiro auxiliar para simular a jogada
+                        Tabuleiro tabAux = new Tabuleiro(tabuleiro);
+                        boolMoviment = tabAux.movimentar(pos[0], pos[1]);
+
+                        // Verifica o movimento
+                        if (!boolMoviment) System.out.println("Movimento invalido - Jogue novamente");
+                        else {
+                            boolean xequeAtual = isXeque(tabAux, Pecas.Cores.BRANCO);
+                            if (xequeAtual) {
+                                System.out.println("Movimento invalido - O rei nao pode estar em xeque");
+                                boolMoviment = false;
+                            } else {
+                                tabuleiro.movimentar(pos[0], pos[1]);
+                            }
+                        }
+                    }
 
                 } while (pos == null || !boolCor || !boolMoviment);
                 verificarPromocao(tabuleiro, pos[1], jogador1);
@@ -112,10 +126,24 @@ public class JogoXadrez {
                     }
 
                     if (pos != null && boolCor) {
-                        boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
-                    }
 
-                    if (!boolMoviment) System.out.println("Movimento invalido - Jogue novamente");
+                        // Agora verificamos se a jogada deixa em xeque ou se a jogada permanece em xeque
+                        // Vamos criar um tabulueiro auxiliar para simular a jogada
+                        Tabuleiro tabAux = new Tabuleiro(tabuleiro);
+                        boolMoviment = tabAux.movimentar(pos[0], pos[1]);
+
+                        // Verifica o movimento
+                        if (!boolMoviment) System.out.println("Movimento invalido - Jogue novamente");
+                        else {
+                            boolean xequeAtual = isXeque(tabAux, Pecas.Cores.PRETO);
+                            if (xequeAtual) {
+                                System.out.println("Movimento invalido - O rei nao pode estar em xeque");
+                                boolMoviment = false;
+                            } else {
+                                tabuleiro.movimentar(pos[0], pos[1]);
+                            }
+                        }
+                    }
 
                 } while (pos == null || !boolCor || !boolMoviment);
                 verificarPromocao(tabuleiro, pos[1], jogador2);
@@ -143,7 +171,6 @@ public class JogoXadrez {
 
         while (!(isXequeMate(tabuleiro, Pecas.Cores.BRANCO)) && !(isXequeMate(tabuleiro, Pecas.Cores.PRETO))){
             // Variaveis
-            Scanner scanner = new Scanner(System.in);
             // Se o número da jogada for par = Branco joga, se o número for impar preto joga
             if (contador % 2 ==0) {
                 System.out.println("Turno da peça branca - Digite: Posição Inicial Posição Final (ou 'desistir') ");
@@ -153,6 +180,7 @@ public class JogoXadrez {
                 String[] pos = new String[2];
                 boolean boolCor = false;
                 boolean boolMoviment = false;
+
                 do {
                     String jogada = jogador1.realizarJogada();
                     if (jogada.equalsIgnoreCase("desistir") || jogada.equalsIgnoreCase("ff")) {
@@ -174,10 +202,25 @@ public class JogoXadrez {
                     }
 
                     if (pos != null && boolCor) {
-                        boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
+
+                        // Agora verificamos se a jogada deixa em xeque ou se a jogada permanece em xeque
+                        // Vamos criar um tabulueiro auxiliar para simular a jogada
+                        Tabuleiro tabAux = new Tabuleiro(tabuleiro);
+                        boolMoviment = tabAux.movimentar(pos[0], pos[1]);
+
+                        // Verifica o movimento
+                        if (!boolMoviment) System.out.println("Movimento invalido - Jogue novamente");
+                        else {
+                            boolean xequeAtual = isXeque(tabAux, Pecas.Cores.BRANCO);
+                            if (xequeAtual) {
+                                System.out.println("Movimento invalido - O rei nao pode estar em xeque");
+                                boolMoviment = false;
+                            } else {
+                                tabuleiro.movimentar(pos[0], pos[1]);
+                            }
+                        }
                     }
 
-                    if (!boolMoviment) System.out.println("Movimento invalido - Jogue novamente");
 
                 } while (pos == null || !boolCor || !boolMoviment);
                 verificarPromocao(tabuleiro, pos[1], jogador1);
@@ -206,7 +249,23 @@ public class JogoXadrez {
                     }
 
                     if (pos != null && boolCor) {
-                        boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
+
+                        // Agora verificamos se a jogada deixa em xeque ou se a jogada permanece em xeque
+                        // Vamos criar um tabulueiro auxiliar para simular a jogada
+                        Tabuleiro tabAux = new Tabuleiro(tabuleiro);
+                        boolMoviment = tabAux.movimentar(pos[0], pos[1]);
+
+                        // Verifica o movimento
+
+                        if (boolMoviment) {
+                            boolean xequeAtual = isXeque(tabAux, Pecas.Cores.PRETO);
+                            if (xequeAtual) {
+                                System.out.println("Movimento invalido - O rei nao pode estar em xeque");
+                                boolMoviment = false;
+                            } else {
+                                tabuleiro.movimentar(pos[0], pos[1]);
+                            }
+                        }
                     }
 
 

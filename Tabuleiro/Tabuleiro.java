@@ -82,6 +82,16 @@ public class Tabuleiro {
         }
     }
 
+    // Construtor de copia
+    public Tabuleiro(Tabuleiro original) {
+        this.pecas = new Pecas[tam][tam];
+        for (int i = 0; i < tam; i++) {
+            for (int j = 0; j < tam; j++) {
+                this.pecas[i][j] = original.pecas[i][j];
+            }
+        }
+
+    }
 
     // Metodos
 
@@ -325,5 +335,7 @@ public class Tabuleiro {
 
         return true;
     }
+
+
 
 }
