@@ -13,6 +13,7 @@ import pecas.rainha.Rainha;
 import pecas.rei.Rei;
 import pecas.vazio.Vazio;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class JogoXadrez {
@@ -68,7 +69,7 @@ public class JogoXadrez {
                     }
 
                 } while (pos == null || !boolCor || !boolMoviment);
-                verificarPromocao(tabuleiro, pos[1]);
+                verificarPromocao(tabuleiro, pos[1], jogador1);
 
                 // Veremos se
 
@@ -100,7 +101,7 @@ public class JogoXadrez {
 
 
                 } while (pos == null || !boolCor || !boolMoviment);
-                verificarPromocao(tabuleiro, pos[1]);
+                verificarPromocao(tabuleiro, pos[1], jogador2);
                 tabuleiro.mostraTabuleiro();
 
             }
@@ -153,7 +154,7 @@ public class JogoXadrez {
                     }
 
                 } while (pos == null || !boolCor || !boolMoviment);
-                verificarPromocao(tabuleiro, pos[1]);
+                verificarPromocao(tabuleiro, pos[1], jogador1);
 
                 // Veremos se
 
@@ -175,7 +176,7 @@ public class JogoXadrez {
 
                     // Segundo verificamos a cor
                     if (pos != null) {
-                        boolCor = tabuleiro.getCorPeca(pos[0], Pecas.Cores.BRANCO);
+                        boolCor = tabuleiro.getCorPeca(pos[0], Pecas.Cores.PRETO);
 
                     }
 
@@ -184,7 +185,7 @@ public class JogoXadrez {
                     }
 
                 } while (pos == null || !boolCor || !boolMoviment);
-                verificarPromocao(tabuleiro, pos[1]);
+                verificarPromocao(tabuleiro, pos[1], jogador2);
 
                 // Veremos se
 
@@ -278,41 +279,56 @@ public class JogoXadrez {
         return false;
     }
     // Método para verificar a promoção do peão
-    public void verificarPromocao(Tabuleiro tabuleiro, String posDestino) {
-        // Converte a string para as posições reais da matriz
+    public void verificarPromocao(Tabuleiro tabuleiro, String posDestino, Jogador jogadorAtual) {
         int linha = Character.getNumericValue(posDestino.charAt(1)) - 1;
         int coluna = tabuleiro.mapaColunas.get(posDestino.charAt(0));
-        
+
         Pecas peca = tabuleiro.getPeca(linha, coluna);
 
-        // Se a peça que chegou ali for um Peão, verifica a promoção
         if (peca instanceof Peao) {
             boolean promocaoBranca = (peca.getCor() == Pecas.Cores.BRANCO && linha == 7);
             boolean promocaoNegra = (peca.getCor() == Pecas.Cores.PRETO && linha == 0);
 
             if (promocaoBranca || promocaoNegra) {
-                promoverPeao(tabuleiro, linha, coluna, peca.getCor());
+                promoverPeao(tabuleiro, linha, coluna, peca.getCor(), jogadorAtual);
             }
         }
     }
 
-    private void promoverPeao(Tabuleiro tabuleiro, int linha, int coluna, Pecas.Cores cor) {
-        System.out.println("\n*** PROMOÇÃO DO PEÃO! ***");
-        System.out.println("Escolha a peça para qual deseja promover:");
-        System.out.println("1 - Rainha | 2 - Torre | 3 - Bispo | 4 - Cavalo");
-        System.out.print("Sua escolha: ");
-        
-        Scanner scanner = new Scanner(System.in);
-        int escolha = scanner.nextInt();
-        
+    private void promoverPeao(Tabuleiro tabuleiro, int linha, int coluna, Pecas.Cores cor, Jogador jogadorAtual) {
         Pecas novaPeca;
-        switch (escolha) {
-            case 2: novaPeca = new Torre(cor); break;
-            case 3: novaPeca = new Bispo(cor); break;
-            case 4: novaPeca = new Cavalo(cor); break;
-            default: novaPeca = new Rainha(cor); break;
+
+        if (jogadorAtual instanceof JogadorComputador) {
+            // Computador escolhe sozinho, sem pedir input
+            System.out.println("\n*** PROMOÇÃO DO PEÃO (Computador) ***");
+            Random random = new Random();
+            int escolha = random.nextInt(4) + 1; // 1 a 4
+
+            switch (escolha) {
+                case 2: novaPeca = new Torre(cor); break;
+                case 3: novaPeca = new Bispo(cor); break;
+                case 4: novaPeca = new Cavalo(cor); break;
+                default: novaPeca = new Rainha(cor); break;
+            }
+            System.out.println("Computador promoveu o peão para: " + novaPeca.getClass().getSimpleName());
+
+        } else {
+            System.out.println("\n*** PROMOÇÃO DO PEÃO! ***");
+            System.out.println("Escolha a peça para qual deseja promover:");
+            System.out.println("1 - Rainha | 2 - Torre | 3 - Bispo | 4 - Cavalo");
+            System.out.print("Sua escolha: ");
+
+            Scanner scanner = new Scanner(System.in);
+            int escolha = scanner.nextInt();
+
+            switch (escolha) {
+                case 2: novaPeca = new Torre(cor); break;
+                case 3: novaPeca = new Bispo(cor); break;
+                case 4: novaPeca = new Cavalo(cor); break;
+                default: novaPeca = new Rainha(cor); break;
+            }
         }
-        
+
         tabuleiro.substituirPeca(linha, coluna, novaPeca);
     }
 

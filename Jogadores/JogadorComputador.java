@@ -11,15 +11,14 @@ public class JogadorComputador extends Jogador implements Jogar{
 
     @Override
     public String realizarJogada() {
-        // Basicamente o computador ira pegar uma jogada aleatoria ate achar uma valida e ira jogar
-        // Entao ele precisa pegar dois pares (coluna, linha) ate ser verdadeira
         Random random = new Random();
-        int x1 = random.nextInt(7);
-        int x2 = random.nextInt(7);
-        int y1 = random.nextInt(7);
-        int y2 = random.nextInt(7);
+        char[] colunas = {'a','b','c','d','e','f','g','h'};
 
+        char col1 = colunas[random.nextInt(8)];
+        int  lin1 = random.nextInt(8) + 1;
+        char col2 = colunas[random.nextInt(8)];
+        int  lin2 = random.nextInt(8) + 1;
 
-        return Integer.toString(x1) + Integer.toString(y1) + " " + Integer.toString(x2) + Integer.toString(y2);
+        return "" + col1 + lin1 + " " + col2 + lin2;
     }
 }
