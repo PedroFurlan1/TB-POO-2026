@@ -241,33 +241,34 @@ public class Tabuleiro {
             System.out.printf("%c\t", letras[k]);
         }
         //Laços aninhados que printarão o tabuleiro
-        for (int i = 0; i< 8; i++) {
-            System.out.println();                 //Espaço entre as linhas
-            System.out.printf("%d\t", i);         //Printando os números das linhas
+        for (int i = 7; i >= 0; i--) {
+            System.out.println();
+            System.out.printf("%d\t", i + 1);   // mostra a fileira real 1-8, não o índice
             for(int j = 0; j< 8; j++) {
                 if (pecas[i][j] instanceof Vazio) {
-                    System.out.print(".\t");                    //Printando . caso o espaço esteja vazio
+                    System.out.print(".\t");
                     continue;
                 }
                 switch(pecas[i][j].getCor()) {                     //Switch para separar as peças pretas das brancas
                     case PRETO:
                         switch (pecas[i][j]) {                     //Switch para printar de acordo com o tipo da peça
-                            case Rei rei -> System.out.print("♚\t");
-                            case Rainha rainha -> System.out.print("♛\t");
-                            case Torre torre -> System.out.print("♜\t");
-                            case Bispo bispo -> System.out.print("♝\t");
-                            case Cavalo cavalo -> System.out.print("♞\t");
-                            case null, default -> System.out.print("♟\t");
-                        }
-                        break;
-                    case BRANCO:
-                        switch (pecas[i][j]) {                      //Switch para printar de acordo com o tipo da peça
                             case Rei rei -> System.out.print("♔\t");
                             case Rainha rainha -> System.out.print("♕\t");
                             case Torre torre -> System.out.print("♖\t");
                             case Bispo bispo -> System.out.print("♗\t");
                             case Cavalo cavalo -> System.out.print("♘\t");
                             case null, default -> System.out.print("♙\t");
+
+                        }
+                        break;
+                    case BRANCO:
+                        switch (pecas[i][j]) {                      //Switch para printar de acordo com o tipo da peça
+                            case Rei rei -> System.out.print("♚\t");
+                            case Rainha rainha -> System.out.print("♛\t");
+                            case Torre torre -> System.out.print("♜\t");
+                            case Bispo bispo -> System.out.print("♝\t");
+                            case Cavalo cavalo -> System.out.print("♞\t");
+                            case null, default -> System.out.print("♟\t");
 
                         }
                         break;
@@ -283,7 +284,8 @@ public class Tabuleiro {
     }
 
     public Boolean getCorPeca(String pos, Pecas.Cores cor) {
-        Pecas pecasAux = pecas[Character.getNumericValue(pos.charAt(0))][Character.getNumericValue(pos.charAt(1))];
+
+        Pecas pecasAux = pecas[Character.getNumericValue(pos.charAt(1)) - 1][mapaColunas.get(pos.charAt(0))];
         return (pecasAux.getCor() == cor);
     }
 

@@ -21,7 +21,7 @@ public class Rainha extends Pecas implements ValidarJogadas{
         boolean mesmaColuna = (y1 == y2);
         boolean mesmaDiagonal = Math.abs(x2 - x1) == Math.abs(y2 - y1);
         if (!(mesmaLinha || mesmaColuna || mesmaDiagonal)) {
-            System.out.println("Posição inválida!");
+
             return false;
         }
 

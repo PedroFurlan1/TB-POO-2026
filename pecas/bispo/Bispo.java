@@ -21,7 +21,7 @@ public class Bispo extends Pecas implements  ValidarJogadas {
         //Verifica se o movimento é diagonal
     boolean mesmadiagonal = Math.abs(x2 - x1) == Math.abs(y2 - y1);
         if (!mesmadiagonal) {
-            System.out.println("Movimento inválido");
+
             return false;
         }
         return true;

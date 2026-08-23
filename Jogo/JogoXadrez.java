@@ -33,35 +33,39 @@ public class JogoXadrez {
         this.tabuleiro = tabuleiro;
     }
 
-    // Jogando o jogo
-    public void JogarXadrez() {
+    // Jogando o jogo HUMANO x HUMANO
+    public void JogarXadrez(JogadorHumano jogador1, JogadorHumano jogador2) {
         System.out.println("------------------ Iniciando jogo de xadrez ------------------ ");
         tabuleiro.mostraTabuleiro();
         int contador = 0;
 
-        while (!(isXequeMate(tabuleiro, Pecas.Cores.BRANCO)) || !(isXequeMate(tabuleiro, Pecas.Cores.PRETO))){
+        while (!(isXequeMate(tabuleiro, Pecas.Cores.BRANCO)) && !(isXequeMate(tabuleiro, Pecas.Cores.PRETO))){
             // Variaveis
-            Scanner scanner = new Scanner(System.in);
             // Se o número da jogada for par = Branco joga, se o número for impar preto joga
             if (contador % 2 ==0) {
                 System.out.println("Turno da peça branca - Digite: Posição Inicial Posição Final ");
-                String jogada = scanner.nextLine();
+
 
                 // Outro ‘loop’ até a jogada estar certa - Separador precisa estar correto, jogada ser valida e a peça ser da cor valida
                 String[] pos = new String[2];
                 boolean boolCor = false;
                 boolean boolMoviment = false;
                 do {
+                    String jogada = jogador1.realizarJogada();
                     // Primeiro vemos se esta correta a posicao
                     pos = separadorJogada(jogada);
 
                     // Segundo verificamos a cor
-                    if (pos != null) boolCor = tabuleiro.getCorPeca(pos[0], Pecas.Cores.BRANCO);
+                    if (pos != null) {
+                        boolCor = tabuleiro.getCorPeca(pos[0], Pecas.Cores.BRANCO);
+                        if (!boolCor) {
+                            System.out.println("Erro: A peça na posição inicial não é branca (ou a casa está vazia)");
+                        }
+                    }
 
-                    if (pos != null && boolCor) boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
-                    // Terceiro movimentamos vendo caso seja valida
-
-
+                    if (pos != null && boolCor) {
+                        boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
+                    }
 
                 } while (pos == null || !boolCor || !boolMoviment);
                 verificarPromocao(tabuleiro, pos[1]);
@@ -71,23 +75,28 @@ public class JogoXadrez {
                 tabuleiro.mostraTabuleiro();
 
             } else {
-                System.out.println("Turno da peça branca - Digite: Posição Inicial Posição Final ");
-                String jogada = scanner.nextLine();
+                System.out.println("Turno da peça preta - Digite: Posição Inicial Posição Final ");
+
 
                 // Outro ‘loop’ até a jogada estar certa - Separador precisa estar correto, jogada ser valida e a peça ser da cor valida
                 String[] pos = new String[2];
                 boolean boolCor = false;
                 boolean boolMoviment = false;
                 do {
+                    String jogada = jogador2.realizarJogada();
                     // Primeiro vemos se esta correta a posicao
                     pos = separadorJogada(jogada);
 
-                    // Segundo verificamos a cor
-                    if (pos != null) boolCor = tabuleiro.getCorPeca(pos[0], Pecas.Cores.PRETO);
+                    if (pos != null) {
+                        boolCor = tabuleiro.getCorPeca(pos[0], Pecas.Cores.PRETO);
+                        if (!boolCor) {
+                            System.out.println("Erro: A peça na posição inicial não é preta (ou a casa está vazia)");
+                        }
+                    }
 
-                    if (pos != null && boolCor) boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
-                    // Terceiro movimentamos vendo caso seja valida
-
+                    if (pos != null && boolCor) {
+                        boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
+                    }
 
 
                 } while (pos == null || !boolCor || !boolMoviment);
@@ -108,8 +117,97 @@ public class JogoXadrez {
 
     }
 
+    // Jogando o jogo HUMANO x COMPUTADOR - computador inicia como PRETO
+    public void JogarXadrez(JogadorHumano jogador1, JogadorComputador jogador2) {
+        System.out.println("------------------ Iniciando jogo de xadrez ------------------ ");
+        tabuleiro.mostraTabuleiro();
+        int contador = 0;
+
+        while (!(isXequeMate(tabuleiro, Pecas.Cores.BRANCO)) && !(isXequeMate(tabuleiro, Pecas.Cores.PRETO))){
+            // Variaveis
+            Scanner scanner = new Scanner(System.in);
+            // Se o número da jogada for par = Branco joga, se o número for impar preto joga
+            if (contador % 2 ==0) {
+                System.out.println("Turno da peça branca - Digite: Posição Inicial Posição Final ");
+
+
+                // Outro ‘loop’ até a jogada estar certa - Separador precisa estar correto, jogada ser valida e a peça ser da cor valida
+                String[] pos = new String[2];
+                boolean boolCor = false;
+                boolean boolMoviment = false;
+                do {
+                    String jogada = jogador1.realizarJogada();
+                    // Primeiro vemos se esta correta a posicao
+                    pos = separadorJogada(jogada);
+
+                    // Segundo verificamos a cor
+                    if (pos != null) {
+                        boolCor = tabuleiro.getCorPeca(pos[0], Pecas.Cores.BRANCO);
+                        if (!boolCor) {
+                            System.out.println("Erro: A peça na posição inicial não é branca (ou a casa está vazia)");
+                        }
+                    }
+
+                    if (pos != null && boolCor) {
+                        boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
+                    }
+
+                } while (pos == null || !boolCor || !boolMoviment);
+                verificarPromocao(tabuleiro, pos[1]);
+
+                // Veremos se
+
+                tabuleiro.mostraTabuleiro();
+
+            } else {
+                // Computador jogando
+                System.out.println("Turno da peça branca - Digite: Posição Inicial Posição Final ");
+
+
+               // Verificando a jogada até estar certa
+                String[] pos = new String[2];
+                boolean boolCor = false;
+                boolean boolMoviment = false;
+                do {
+                    String jogada = jogador2.realizarJogada();
+                    // Primeiro vemos se esta correta a posicao
+                    pos = separadorJogada(jogada);
+
+                    // Segundo verificamos a cor
+                    if (pos != null) {
+                        boolCor = tabuleiro.getCorPeca(pos[0], Pecas.Cores.BRANCO);
+
+                    }
+
+                    if (pos != null && boolCor) {
+                        boolMoviment = tabuleiro.movimentar(pos[0], pos[1]);
+                    }
+
+                } while (pos == null || !boolCor || !boolMoviment);
+                verificarPromocao(tabuleiro, pos[1]);
+
+                // Veremos se
+
+                tabuleiro.mostraTabuleiro();
+
+
+            }
+            contador++;
+
+            // Mostrando se há xeques
+            if (isXeque(tabuleiro, Pecas.Cores.PRETO)) {
+                System.out.println("Atenção - Peças pretas em xeque");
+            } else if (isXeque(tabuleiro, Pecas.Cores.BRANCO)) {
+                System.out.println("Atenção - Peças brancas em xeque");
+            }
+
+        }
+
+    }
+
+
     public String[] separadorJogada(String jogada) {
-        if (jogada.length() > 5) {
+        if (jogada.length() != 5) {
             System.out.println("Digite a jogada no padrão - Posição inicial(espaço)Posição Final");
             return null;
         }
@@ -121,7 +219,7 @@ public class JogoXadrez {
 
         // Verificando se a jogada faz sentido
 
-        if (espaco != ' ' || tabuleiro.tratarJogada(pos1, pos2) != null) {
+        if (espaco != ' ' || tabuleiro.tratarJogada(pos1, pos2) == null) {
             System.out.println("Digite a jogada no padrão - Posição inicial(espaço)Posição Final");
             return null;
         }

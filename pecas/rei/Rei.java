@@ -20,7 +20,7 @@ public class Rei extends Pecas implements  ValidarJogadas {
 
         boolean roque = false;
 
-        if (Math.abs(x2 - x1) == 2 && y1 == y2) roque = true;
+        if (x1 == x2 && Math.abs(y2 - y1) == 2) roque = true;
 
         if (roque == true)
         {
