@@ -198,17 +198,17 @@ public class Tabuleiro {
             if (pecas[x2][y2] instanceof Peao && Math.abs(x2 - x1) == 2) {
                 ((Peao)pecas[x2][y2]).setEnPassant(true);
             }
-
-            switch (pecas[x1][y1]) {
-                case Rei rei: rei.setMoveu(true); rei.setRoqueCurto(false); rei.setRoqueLongo(false);
-                break;
-                case Torre torre: torre.setMoveu(true); 
-                break;
-                default: 
-                break;
-            }
         }
         if (pecaAux instanceof Peao && !sim) ((Peao) pecaAux).incrementarMovimento();
+
+        switch (pecas[x2][y2]) {
+            case Rei rei: rei.setMoveu(true); rei.setRoqueCurto(false); rei.setRoqueLongo(false);
+            break;
+            case Torre torre: torre.setMoveu(true); 
+            break;
+            default: 
+            break;
+        }
 
         return true;
     }

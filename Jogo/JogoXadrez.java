@@ -4,6 +4,8 @@ import Jogadores.Jogador;
 import Jogadores.JogadorComputador;
 import Jogadores.JogadorHumano;
 import Tabuleiro.Tabuleiro;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import pecas.Pecas;
@@ -14,8 +16,6 @@ import pecas.rainha.Rainha;
 import pecas.rei.Rei;
 import pecas.torre.Torre;
 import pecas.vazio.Vazio;
-import java.util.ArrayList;
-import java.util.List;
 
 public class JogoXadrez {
     // Atributos
@@ -411,6 +411,7 @@ public class JogoXadrez {
     public void atualizarEnPassant(Pecas.Cores cor) {
         int linha;
 
+        // Linhas que os peões devem estar
         if (cor == Pecas.Cores.BRANCO) {
             linha = 3;
         }
@@ -423,6 +424,7 @@ public class JogoXadrez {
         {
             Pecas peca = tabuleiro.getPeca(linha, i);
 
+            // Atualiza condição de En Passant
             if (peca instanceof Peao && peca.getCor() == cor && ((Peao)peca).getEnPassant()) {
                 ((Peao)peca).setEnPassant(false);
             } 
@@ -469,7 +471,7 @@ public class JogoXadrez {
 
         else torre_2 = (Torre)tabuleiro.getPeca(linha, 7);
 
-        // Se as torres não tiverem se movido, roque impossível
+        // Se as torres tiverem se movido, roque impossível
         if (torre_1 != null && torre_1.getMoveu()) roqueLongo = false;
         if (torre_2 != null && torre_2.getMoveu()) roqueCurto = false;
 
