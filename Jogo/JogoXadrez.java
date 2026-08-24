@@ -14,6 +14,8 @@ import pecas.rainha.Rainha;
 import pecas.rei.Rei;
 import pecas.torre.Torre;
 import pecas.vazio.Vazio;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JogoXadrez {
     // Atributos
@@ -165,6 +167,13 @@ public class JogoXadrez {
             }
             contador++;
 
+            if (isEmpateMaterialInsuficiente(tabuleiro)) {
+                System.out.println("\n--------------------------------------------------");
+                System.out.println("FIM DE JOGO: Empate por falta de material!");
+                System.out.println("Nenhum jogador possui peças suficientes para dar xeque-mate.");
+                System.out.println("--------------------------------------------------");
+                return;
+            }
             // Mostrando se há xeques
             if (isXeque(tabuleiro, Pecas.Cores.PRETO)) {
                 System.out.println("Atenção - Peças pretas em xeque");
@@ -308,6 +317,14 @@ public class JogoXadrez {
 
             }
             contador++;
+
+            if (isEmpateMaterialInsuficiente(tabuleiro)) {
+                System.out.println("\n--------------------------------------------------");
+                System.out.println("FIM DE JOGO: Empate por falta de material!");
+                System.out.println("Nenhum jogador possui peças suficientes para dar xeque-mate.");
+                System.out.println("--------------------------------------------------");
+                return;
+            }
 
             // Mostrando se há xeques
             if (isXeque(tabuleiro, Pecas.Cores.PRETO)) {
@@ -637,4 +654,76 @@ public class JogoXadrez {
         return true;
     }
 
+    public boolean isEmpateMaterialInsuficiente(Tabuleiro table) {
+    List<Pecas> pecasEmJogo = new ArrayList<>();
+
+    //Percorre o tabuleiro e junta todas as peças que não são Vazio
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            Pecas p = table.getPeca(i, j);
+            if (p != null && !(p instanceof Vazio)) {
+                pecasEmJogo.add(p);
+            }
+        }
+    }
+
+    //Se houver Peão, Torre ou Rainha, o mate ainda é matematicamente possível
+    for (Pecas p : pecasEmJogo) {
+        if (p instanceof Peao || p instanceof Torre || p instanceof Rainha) {
+            return false;
+        }
+    }
+
+    //Filtra apenas as peças menores (exclui os Reis)
+    List<Pecas> pecasMenores = new ArrayList<>();
+    for (Pecas p : pecasEmJogo) {
+        if (!(p instanceof Rei)) {
+            pecasMenores.add(p);
+        }
+    }
+
+    int qtdOutrasPecas = pecasMenores.size();
+
+    //Caso Rei vs Rei
+    if (qtdOutrasPecas == 0) {
+        return true;
+    }
+
+    //Caso Rei e Bispo vs Rei  OU  Rei e Cavalo vs Rei
+    if (qtdOutrasPecas == 1) {
+        Pecas p = pecasMenores.get(0);
+        if (p instanceof Bispo || p instanceof Cavalo) {
+            return true;
+        }
+    }
+
+    // Caso Rei e Bispo vs Rei e Bispo (Bispos em casas da mesma cor)
+    if (qtdOutrasPecas == 2) {
+        Pecas p1 = pecasMenores.get(0);
+        Pecas p2 = pecasMenores.get(1);
+
+        if (p1 instanceof Bispo && p2 instanceof Bispo) {
+            int corCasa1 = getCorCasaPeca(table, p1);
+            int corCasa2 = getCorCasaPeca(table, p2);
+
+            if (corCasa1 != -1 && corCasa1 == corCasa2) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+// Método auxiliar para obter a cor da casa onde a peça está posicionada
+private int getCorCasaPeca(Tabuleiro table, Pecas peca) {
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (table.getPeca(i, j) == peca) {
+                return (i + j) % 2;
+            }
+        }
+    }
+    return -1;
+}
 }
