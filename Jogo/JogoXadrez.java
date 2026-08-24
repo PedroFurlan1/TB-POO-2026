@@ -491,31 +491,44 @@ public class JogoXadrez {
 
         // Se o rei ficar em xeque em posições adjacentes ao roque, roque impossível
 
-        Pecas pecaAux1 = tabuleiro.getPeca(linha, 2);
-        Pecas pecaAux2 = tabuleiro.getPeca(linha, 3);
+        if (roqueLongo) {
+            for (int col : new int[]{3, 2}) {
+                Pecas pecaOriginal = tabuleiro.getPeca(linha, col);
 
-        tabuleiro.substituirPeca(linha, 2, rei);
-        tabuleiro.substituirPeca(linha, 3, rei);
+                tabuleiro.substituirPeca(linha, 4, new Vazio(Pecas.Cores.NEUTRA));
+                tabuleiro.substituirPeca(linha, col, rei);
 
-        if (isXeque(tabuleiro, cor)) {
-            rei.setRoqueLongo(false);
+                boolean emXeque = isXeque(tabuleiro, cor);
+
+                tabuleiro.substituirPeca(linha, col, pecaOriginal);
+                tabuleiro.substituirPeca(linha, 4, rei);
+
+                if (emXeque) {
+                    roqueLongo = false;
+                    break;
+                }
+            }
         }
 
-        tabuleiro.substituirPeca(linha, 2, pecaAux1);
-        tabuleiro.substituirPeca(linha, 3, pecaAux2);
+        // Testando roque
+        if (roqueCurto) {
+            for (int col : new int[]{5, 6}) {
+                Pecas pecaOriginal = tabuleiro.getPeca(linha, col);
 
-        pecaAux1 = tabuleiro.getPeca(linha, 5);
-        pecaAux2 = tabuleiro.getPeca(linha, 6);
+                tabuleiro.substituirPeca(linha, 4, new Vazio(Pecas.Cores.NEUTRA));
+                tabuleiro.substituirPeca(linha, col, rei);
 
-        tabuleiro.substituirPeca(linha, 5, rei);
-        tabuleiro.substituirPeca(linha, 6, rei);
+                boolean emXeque = isXeque(tabuleiro, cor);
 
-        if (isXeque(tabuleiro, cor)) {
-            rei.setRoqueCurto(false);
+                tabuleiro.substituirPeca(linha, col, pecaOriginal);
+                tabuleiro.substituirPeca(linha, 4, rei);
+
+                if (emXeque) {
+                    roqueCurto = false;
+                    break;
+                }
+            }
         }
-
-        tabuleiro.substituirPeca(linha, 5, pecaAux1);
-        tabuleiro.substituirPeca(linha, 6, pecaAux2);
 
         rei.setRoqueLongo(roqueLongo);
         rei.setRoqueCurto(roqueCurto);
