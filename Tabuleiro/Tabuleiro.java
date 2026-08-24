@@ -209,6 +209,14 @@ public class Tabuleiro {
                 return false;
             }
 
+            // Verificando se a casa intermediaria ao pulo está vazia
+            if (pecas[x1][y1] instanceof Peao && Math.abs(x2 - x1) == 2) {
+                int xAux = (x1 + x2) / 2;
+                if (!(pecas[xAux][y1] instanceof Vazio)) {
+                    return false;
+                }
+            }
+
             if ((pecas[x1][y1] instanceof Rainha || pecas[x1][y1] instanceof Torre || pecas[x1][y1] instanceof Bispo) && !(caminhoLimpo(x1, y1, x2, y2))) {
 
                 return false;
@@ -391,8 +399,24 @@ public class Tabuleiro {
             // Peão só pode capturar se for na diagonal (diferença de coluna igual a 1)
             if (pOrigem instanceof Peao && Math.abs(y1 - y2) != 1) return false;
         } else {
-            // Peão só pode andar reto no vazio (diferença de coluna deve ser 0)
-            if (pOrigem instanceof Peao && y1 != y2) return false;
+            if (pOrigem instanceof Peao && y1 != y2) {
+                // Movimento diagonal para casa vazia só é legal se for en passant
+                if (Math.abs(y2 - y1) != 1) return false;
+
+                boolean linhaCorreta =
+                        (pOrigem.getCor() == Pecas.Cores.BRANCO && x1 == 4) ||
+                                (pOrigem.getCor() == Pecas.Cores.PRETO  && x1 == 3);
+                if (!linhaCorreta) return false;
+
+                Pecas adjacente = pecas[x1][y2];
+                if (!(adjacente instanceof Peao) || !((Peao) adjacente).getEnPassant()) {
+                    return false;
+                }
+            }
+            else if (pOrigem instanceof Peao && Math.abs(x2 - x1) == 2) {
+                int xIntermediario = (x1 + x2) / 2;
+                if (!(pecas[xIntermediario][y1] instanceof Vazio)) return false;
+            }
         }
 
         // Caminho limpo para peças de longo alcance
@@ -403,7 +427,6 @@ public class Tabuleiro {
 
         return true;
     }
-
 
 
 }
