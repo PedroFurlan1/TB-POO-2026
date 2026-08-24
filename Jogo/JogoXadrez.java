@@ -616,6 +616,17 @@ public class JogoXadrez {
                                 // Simula a jogada
                                 Pecas pecaDestinoOriginal = table.getPeca(x2, y2);
 
+                                // Detecta se é uma captura en passant
+                                boolean ehEnPassant = pecaAtual instanceof Peao
+                                        && y1 != y2
+                                        && pecaDestinoOriginal instanceof Vazio;
+
+                                Pecas pecaCapturadaEnPassant = null;
+                                if (ehEnPassant) {
+                                    pecaCapturadaEnPassant = table.getPeca(x1, y2);
+                                    table.substituirPeca(x1, y2, new Vazio(Pecas.Cores.NEUTRA));
+                                }
+
                                 table.substituirPeca(x2, y2, pecaAtual);
                                 table.substituirPeca(x1, y1, new Vazio(Pecas.Cores.NEUTRA));
 
@@ -625,6 +636,10 @@ public class JogoXadrez {
                                 //Desfaz o movimento
                                 table.substituirPeca(x1, y1, pecaAtual);
                                 table.substituirPeca(x2, y2, pecaDestinoOriginal);
+
+                                if (ehEnPassant) {
+                                    table.substituirPeca(x1, y2, pecaCapturadaEnPassant);
+                                }
 
                                 // Se ao menos um movimento tirar o Rei do xeque, cancela o xeque-mate
                                 if (!reiAindaEmXeque) {
