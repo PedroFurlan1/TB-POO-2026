@@ -24,6 +24,13 @@ public class Torre extends Pecas implements  ValidarJogadas {
         return true;
     }
 
+    @Override
+    public Pecas copiar() {
+        Torre copia = new Torre(this.cor);
+        copia.moveu = this.moveu;
+        return copia;
+    }
+
     public void setMoveu(boolean moveu) {
         this.moveu = moveu;
     }

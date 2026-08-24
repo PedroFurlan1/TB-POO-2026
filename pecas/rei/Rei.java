@@ -22,26 +22,26 @@ public class Rei extends Pecas implements  ValidarJogadas {
     // Metodos
     @Override
     public boolean is_valid(int x1, int y1, int x2, int y2) {
-        if(super.samPlace(x1, y1, x2, y2)) return false;
+        if (super.samPlace(x1, y1, x2, y2)) return false;
 
-        if (x1 == x2 && y2 - y1 == 2) {
-            if (roqueCurto) roqueou = true;
-            else System.out.println("Roque curto não permitido!");
-
-            return roqueou;
+        // Movimento de roque - so verifica se e permitido, nao executa nada aqui
+        if (x1 == x2 && Math.abs(y2 - y1) == 2) {
+            boolean roqueCurto = (y2 - y1 == 2);
+            return roqueCurto ? this.roqueCurto : this.roqueLongo;
         }
 
-        else if (x1 == x2 && y2 - y1 == -2) {
-            if (roqueLongo) roqueou = true;
-            else System.out.println("Roque longo não permitido!");
+        if (Math.abs(x2 - x1) > 1 || Math.abs(y2 - y1) > 1) return false;
 
-            return roqueou;
-        }
-
-
-        else if (Math.abs(x2 - x1) > 1 || Math.abs(y2 - y1) > 1) return false;
-        
         return true;
+    }
+
+    public Pecas copiar() {
+        Rei copia = new Rei(this.cor);
+        copia.moveu = this.moveu;
+        copia.roqueCurto = this.roqueCurto;
+        copia.roqueLongo = this.roqueLongo;
+        copia.roqueou = this.roqueou;
+        return copia;
     }
 
     public void setMoveu(boolean moveu) {

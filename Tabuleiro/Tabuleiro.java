@@ -85,12 +85,9 @@ public class Tabuleiro {
     // Construtor de copia
     public Tabuleiro(Tabuleiro original) {
         this.pecas = new Pecas[tam][tam];
-        for (int i = 0; i < tam; i++) {
-            for (int j = 0; j < tam; j++) {
-                this.pecas[i][j] = original.pecas[i][j];
-            }
-        }
-
+        for (int i = 0; i < tam; i++)
+            for (int j = 0; j < tam; j++)
+                this.pecas[i][j] = original.pecas[i][j].copiar();
     }
 
     // Metodos
@@ -105,6 +102,32 @@ public class Tabuleiro {
 
         // Primeiro vamos pegar a peça na posicao incial
         Pecas pecaAux = pecas[x1][y1];
+
+        // Tratamento do roque
+        if (pecaAux instanceof Rei rei && x1 == x2 && Math.abs(y2 - y1) == 2) {
+            boolean roqueCurto = (y2 - y1 == 2);
+
+            if (!rei.is_valid(x1, y1, x2, y2)) return false; // ja checa roqueCurto/roqueLongo
+
+            int colTorreOrigem  = roqueCurto ? 7 : 0;
+            int colTorreDestino = roqueCurto ? y1 + 1 : y1 - 1;
+
+            // Move o rei
+            pecas[x2][y2] = rei;
+            pecas[x1][y1] = new Vazio(Pecas.Cores.NEUTRA);
+            // Move a torre
+            Pecas torreObj = pecas[x1][colTorreOrigem];
+            pecas[x1][colTorreDestino] = torreObj;
+            pecas[x1][colTorreOrigem] = new Vazio(Pecas.Cores.NEUTRA);
+
+            if (!sim) {
+                rei.setMoveu(true);
+                rei.setRoqueCurto(false);
+                rei.setRoqueLongo(false);
+                if (torreObj instanceof Torre torre) torre.setMoveu(true);
+            }
+            return true;
+        }
 
 
         // Verificamos se a peca e validaa

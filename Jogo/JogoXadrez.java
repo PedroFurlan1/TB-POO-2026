@@ -98,7 +98,6 @@ public class JogoXadrez {
                 atualizarRoque(Pecas.Cores.BRANCO);
                 atualizarRoque(Pecas.Cores.PRETO);
 
-                realizarRoque(Pecas.Cores.BRANCO);
 
                 atualizarEnPassant(Pecas.Cores.PRETO);
 
@@ -159,7 +158,6 @@ public class JogoXadrez {
                 atualizarRoque(Pecas.Cores.BRANCO);
                 atualizarRoque(Pecas.Cores.PRETO);
 
-                realizarRoque(Pecas.Cores.PRETO);
                 atualizarEnPassant(Pecas.Cores.BRANCO);
 
                 tabuleiro.mostraTabuleiro();
@@ -251,8 +249,6 @@ public class JogoXadrez {
                 atualizarRoque(Pecas.Cores.BRANCO);
                 atualizarRoque(Pecas.Cores.PRETO);
 
-                realizarRoque(Pecas.Cores.BRANCO);
-
                 atualizarEnPassant(Pecas.Cores.PRETO);
 
                 // Veremos se
@@ -306,7 +302,7 @@ public class JogoXadrez {
                 atualizarRoque(Pecas.Cores.BRANCO);
                 atualizarRoque(Pecas.Cores.PRETO);
 
-                realizarRoque(Pecas.Cores.PRETO);
+
 
                 atualizarEnPassant(Pecas.Cores.BRANCO);
 
@@ -454,7 +450,13 @@ public class JogoXadrez {
         if (rei.getMoveu()) {
             rei.setRoqueCurto(false);
             rei.setRoqueLongo(false);
+            return;
+        }
 
+        //Se o rei estiver atualmente em xeque, roque impossível
+        if (isXeque(tabuleiro, cor)) {
+            rei.setRoqueCurto(false);
+            rei.setRoqueLongo(false);
             return;
         }
 
@@ -519,35 +521,6 @@ public class JogoXadrez {
         rei.setRoqueCurto(roqueCurto);
     }
 
-    public void realizarRoque(Pecas.Cores cor) {
-        int linha;
-
-        if (cor == Pecas.Cores.BRANCO) linha = 0;
-        else linha = 7;
-
-        Pecas possivel_roque_1 = tabuleiro.getPeca(linha, 2);
-        Pecas possivel_roque_2 = tabuleiro.getPeca(linha, 6);
-
-        if (possivel_roque_1 instanceof Rei && possivel_roque_1.getCor() == cor) {
-            Rei roque_1 = (Rei)possivel_roque_1;
-            
-            if (roque_1.getRoqueou()) {
-                tabuleiro.substituirPeca(linha, 3, tabuleiro.getPeca(linha, 0));
-                tabuleiro.substituirPeca(linha, 0, new Vazio(Pecas.Cores.NEUTRA));
-                roque_1.setRoqueou(false);
-            }
-        }
-
-        else if (possivel_roque_2 instanceof Rei && possivel_roque_2.getCor() == cor) {
-            Rei roque_2 = (Rei)possivel_roque_2;
-            
-            if (roque_2.getRoqueou()) {
-                tabuleiro.substituirPeca(linha, 5, tabuleiro.getPeca(linha, 7));
-                tabuleiro.substituirPeca(linha, 7, new Vazio(Pecas.Cores.NEUTRA));
-                roque_2.setRoqueou(false);
-            }
-        }
-    }
 
     // Método para verificar a promoção do peão
     public void verificarPromocao(Tabuleiro tabuleiro, String posDestino, Jogador jogadorAtual) {

@@ -18,6 +18,12 @@ public class Pecas {
         this.cor = cor;
     }
 
+
+    public Pecas copiar() {
+        return new Pecas(this.cor);
+    }
+
+
     // Metodos
 
     //1. Metodo para ver se a peça esta na mesma posição quando se mover
