@@ -19,6 +19,15 @@ public class Rei extends Pecas implements  ValidarJogadas {
         moveu = false;
     }
 
+    public Pecas copiar() {
+        Rei copia = new Rei(this.cor);
+        copia.moveu = this.moveu;
+        copia.roqueCurto = this.roqueCurto;
+        copia.roqueLongo = this.roqueLongo;
+        copia.roqueou = this.roqueou;
+        return copia;
+    }
+
     // Metodos
     @Override
     public boolean is_valid(int x1, int y1, int x2, int y2) {
@@ -35,14 +44,6 @@ public class Rei extends Pecas implements  ValidarJogadas {
         return true;
     }
 
-    public Pecas copiar() {
-        Rei copia = new Rei(this.cor);
-        copia.moveu = this.moveu;
-        copia.roqueCurto = this.roqueCurto;
-        copia.roqueLongo = this.roqueLongo;
-        copia.roqueou = this.roqueou;
-        return copia;
-    }
 
     public void setMoveu(boolean moveu) {
         this.moveu = moveu;

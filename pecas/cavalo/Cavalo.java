@@ -10,6 +10,12 @@ public class Cavalo extends Pecas implements  ValidarJogadas {
         super(cor);
     }
 
+    @Override
+    public Pecas copiar() {
+        return new Cavalo(this.cor);
+    }
+
+
     // Metodos
     @Override
     public boolean is_valid(int x1, int y1, int x2, int y2) {

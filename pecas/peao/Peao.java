@@ -14,6 +14,14 @@ public class Peao extends Pecas implements  ValidarJogadas {
         enPassant = false;
     }
 
+    @Override
+    public Pecas copiar() {
+        Peao copia = new Peao(this.cor);
+        copia.numMovimento = this.numMovimento;
+        copia.enPassant = this.enPassant;
+        return copia;
+    }
+
     // Metodos
     @Override
     public boolean is_valid(int x1, int y1, int x2, int y2) {
@@ -37,4 +45,6 @@ public class Peao extends Pecas implements  ValidarJogadas {
     public boolean getEnPassant() {
         return enPassant;
     }
+
+
 }

@@ -11,6 +11,11 @@ public class Bispo extends Pecas implements  ValidarJogadas {
         super(cor);
     }
 
+    @Override
+    public Pecas copiar() {
+        return new Bispo(this.cor);
+    }
+
     // Metodos
     @Override
     public boolean is_valid(int x1, int y1, int x2, int y2) {
@@ -26,6 +31,8 @@ public class Bispo extends Pecas implements  ValidarJogadas {
         }
         return true;
     }
+
+
 
     }
 

@@ -9,5 +9,9 @@ public class Vazio extends Pecas{
         super(cor); // A cor sera setada como branco
     }
 
+    @Override
+    public Pecas copiar() {
+        return new Vazio(this.cor);
+    }
 
 }
