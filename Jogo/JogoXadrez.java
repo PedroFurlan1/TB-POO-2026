@@ -286,7 +286,6 @@ public class JogoXadrez {
                         if (boolMoviment) {
                             boolean xequeAtual = isXeque(tabAux, Pecas.Cores.PRETO);
                             if (xequeAtual) {
-                                System.out.println("Movimento invalido - O rei nao pode estar em xeque");
                                 boolMoviment = false;
                             } else {
                                 tabuleiro.movimentar(pos[0], pos[1], false);
